@@ -6,7 +6,7 @@
 
 UENUM(BlueprintType)
  enum class ERoomType : uint8 {
-      Free = 0	UMETA(DisplayName = "FREE"),
+      Free = 0	UMETA(DisplayName = "DEFAULT"),
       Start = 1	UMETA(DisplayName = "START"),
       End = 2	UMETA(DisplayName = "END"),
  };
@@ -16,17 +16,18 @@ class LUDUMDARE48_API ARoom : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
-	ARoom();
+private:	
+	int PositionX;
+	int PositionY;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
+	ARoom();
+	
 	virtual void Tick(float DeltaTime) override;
+	void UpdateColor(FLinearColor Color) const;
 
 	ERoomType Type = ERoomType::Free;
 	bool IsObstacle = false;
