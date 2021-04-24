@@ -25,6 +25,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsDecreased, int32, Coins);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsIncreased, int32, Coins);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMagicDecreased, int32, Coins);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMagicIncreased, int32, Coins);
 /**
  * 
  */
@@ -32,11 +36,11 @@ UCLASS()
 class LUDUMDARE48_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
+
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
-	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -48,14 +52,14 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-// Movement
+	// Movement
 private:
 	UFUNCTION()
 	void MoveForward(const float AxisValue);
 	UFUNCTION()
 	void MoveRight(const float AxisValue);
 
-// Pickups
+	// Pickups
 private:
 	UFUNCTION()
 	void ActivatePickup(
@@ -66,7 +70,7 @@ private:
 		bool bFromSweep,
 		const FHitResult& SweepResult);
 
-// Lives
+	// Lives
 public:
 	UFUNCTION(BlueprintCallable, Category="Player Character|Lives")
 	void DecreaseLives(const int32 Amount) const;
@@ -88,7 +92,7 @@ private:
 	UFUNCTION()
 	void BroadcastLivesIncreased(const int32 Value);
 
-// HitPoints
+	// HitPoints
 public:
 	UFUNCTION(BlueprintCallable, Category="Player Character|HitPoints")
 	void DecreaseHitPoints(const int32 Amount) const;
@@ -107,7 +111,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Player Character|HitPoints")
 	FOnPlayerDeath OnPlayerDeath; // Called when hit points <= 0
 private:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|HitPoints", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|HitPoints",
+		meta=(AllowPrivateAccess="true"))
 	UBaseResource* HitPoints{nullptr};
 	UFUNCTION()
 	void ReceiveDamage(
@@ -121,7 +126,7 @@ private:
 	UFUNCTION()
 	void BroadcastHitPointsIncreased(const int32 Value);
 
-// Coins
+	// Coins
 public:
 	UFUNCTION(BlueprintCallable, Category="Player Character|Coins")
 	void DecreaseCoins(const int32 Amount) const;
@@ -129,6 +134,7 @@ public:
 	void IncreaseCoins(const int32 Amount) const;
 	UFUNCTION(BlueprintPure)
 	int32 GetCoins() const { return Coins->GetValue(); }
+
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Coins")
 	FOnCoinsDecreased OnCoinsDecreased;
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Coins")
@@ -142,4 +148,24 @@ private:
 	void BroadcastCoinsDecreased(const int32 Value);
 	UFUNCTION()
 	void BroadcastCoinsIncreased(const int32 Value);
+
+	// Magic
+public:
+	UFUNCTION(BlueprintCallable, Category="Player Character|Magic")
+	void DecreaseMagic(const int32 Amount) const;
+	UFUNCTION(BlueprintCallable, Category="Player Character|Magic")
+	void IncreaseMagic(const int32 Amount) const;
+	UFUNCTION(BlueprintPure)
+	int32 GetMagic() const { return Magic->GetValue(); }
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Magic")
+	FOnMagicDecreased OnMagicDecreased;
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Magic")
+	FOnMagicIncreased OnMagicIncreased;
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|Magic", meta=(AllowPrivateAccess="true"))
+	UBaseResource* Magic{nullptr};
+	UFUNCTION()
+	void BroadcastMagicDecreased(const int32 Value);
+	UFUNCTION()
+	void BroadcastMagicIncreased(const int32 Value);
 };

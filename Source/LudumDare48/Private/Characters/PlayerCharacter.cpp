@@ -27,6 +27,9 @@ APlayerCharacter::APlayerCharacter()
 	
 	Coins = CreateDefaultSubobject<UBaseResource>(TEXT("Coins"));
 	Coins->SetMaxValue(0);
+
+	Magic = CreateDefaultSubobject<UBaseResource>(TEXT("Magic"));
+	Magic->SetMaxValue(3);
 }
 
 // Called when the game starts or when spawned
@@ -45,6 +48,9 @@ void APlayerCharacter::BeginPlay()
 
 	Coins->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastCoinsDecreased);
 	Coins->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastCoinsIncreased);
+
+	Magic->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastMagicDecreased);
+	Magic->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastMagicIncreased);
 }
 
 // Called every frame
@@ -177,4 +183,24 @@ void APlayerCharacter::BroadcastCoinsIncreased(const int32 Value)
 		DecreaseCoins(LiveCost);
 		IncreaseLives(1);
 	}
+}
+
+void APlayerCharacter::DecreaseMagic(const int32 Amount) const
+{
+	Magic->DecreaseValue(Amount, false);
+}
+
+void APlayerCharacter::IncreaseMagic(const int32 Amount) const
+{
+	Magic->IncreaseValue(Amount, false);
+}
+
+void APlayerCharacter::BroadcastMagicDecreased(const int32 Value)
+{
+	OnMagicDecreased.Broadcast(Value);
+}
+
+void APlayerCharacter::BroadcastMagicIncreased(const int32 Value)
+{
+	OnMagicIncreased.Broadcast(Value);
 }
