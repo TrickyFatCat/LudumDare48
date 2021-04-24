@@ -55,6 +55,17 @@ private:
 	UFUNCTION()
 	void MoveRight(const float AxisValue);
 
+// Pickups
+private:
+	UFUNCTION()
+	void ActivatePickup(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+
 // Lives
 public:
 	UFUNCTION(BlueprintCallable, Category="Player Character|Lives")

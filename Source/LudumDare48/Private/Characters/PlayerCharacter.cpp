@@ -3,7 +3,9 @@
 
 #include "Characters/PlayerCharacter.h"
 
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Pickups/BasePickup.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -27,12 +29,17 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::ActivatePickup);
+
 	Lives->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastLivesDecreased);
 	Lives->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastLivesIncreased);
 
 	HitPoints->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsDecreased);
 	HitPoints->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsIncreased);
 	OnTakeAnyDamage.AddDynamic(this, &APlayerCharacter::ReceiveDamage);
+
+	Coins->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastCoinsDecreased);
+	Coins->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastCoinsIncreased);
 }
 
 // Called every frame
@@ -73,6 +80,16 @@ void APlayerCharacter::MoveRight(const float AxisValue)
 		const FVector MoveDirection = FRotationMatrix(NewYawRotation).GetUnitAxis(EAxis::Y);
 		AddMovementInput(MoveDirection, AxisValue);
 	}
+}
+
+void APlayerCharacter::ActivatePickup(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ABasePickup* Pickup = Cast<ABasePickup>(OtherActor);
+
+	if (Pickup == nullptr) return;
+
+	Pickup->ActivatePickup(this);
 }
 
 void APlayerCharacter::DecreaseLives(const int32 Amount) const
