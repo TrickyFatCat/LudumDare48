@@ -20,8 +20,13 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	
 	Lives = CreateDefaultSubobject<UBaseResource>(TEXT("Lives"));
+	Lives->SetMaxValue(3);
+	
 	HitPoints = CreateDefaultSubobject<UBaseResource>(TEXT("HitPoints"));
+	HitPoints->SetMaxValue(3);
+	
 	Coins = CreateDefaultSubobject<UBaseResource>(TEXT("Coins"));
+	Coins->SetMaxValue(0);
 }
 
 // Called when the game starts or when spawned

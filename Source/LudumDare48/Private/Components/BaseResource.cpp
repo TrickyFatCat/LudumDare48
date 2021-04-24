@@ -20,6 +20,8 @@ void UBaseResource::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Value = MaxValue;
+
 	// ...
 }
 

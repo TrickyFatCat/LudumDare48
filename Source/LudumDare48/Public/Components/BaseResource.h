@@ -48,6 +48,8 @@ public:
 	int32 GetValue() const { return Value; }
 	UFUNCTION(BlueprintPure)
 	int32 GetMaxValue() const { return MaxValue; }
+	UFUNCTION(BlueprintCallable)
+	void SetMaxValue(const int32 NewValue) { MaxValue = NewValue; }
 	UFUNCTION(BlueprintPure)
 	bool GetIsImmune() const { return bIsImmune; }
 	UFUNCTION(BlueprintPure)
@@ -55,7 +57,7 @@ public:
 protected:
 
 private:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, BlueprintGetter=GetMaxValue, Category="Base Resource", meta=(AllowPrivateAccess="true", ClampMin="1"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, BlueprintGetter=GetMaxValue, BlueprintSetter=SetMaxValue, Category="Base Resource", meta=(AllowPrivateAccess="true", ClampMin="0"))
 	int32 MaxValue{3};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintGetter=GetValue, Category="Base Resource", meta=(AllowPrivateAccess="true"))
 	int32 Value{3};
