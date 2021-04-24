@@ -132,3 +132,29 @@ void APlayerCharacter::BroadcastHitPointsIncreased(const int32 Value)
 {
 	OnHitPointsIncreased.Broadcast(Value);
 }
+
+void APlayerCharacter::DecreaseCoins(const int32 Amount) const
+{
+	Coins->DecreaseValue(Amount, false);
+}
+
+void APlayerCharacter::IncreaseCoins(const int32 Amount) const
+{
+	Coins->IncreaseValue(Amount, false);
+}
+
+void APlayerCharacter::BroadcastCoinsDecreased(const int32 Value)
+{
+	OnCoinsIncreased.Broadcast(Value);
+}
+
+void APlayerCharacter::BroadcastCoinsIncreased(const int32 Value)
+{
+	OnCoinsDecreased.Broadcast(Value);
+	
+	if (Value >= LiveCost)
+	{
+		DecreaseCoins(LiveCost);
+		IncreaseLives(1);
+	}
+}

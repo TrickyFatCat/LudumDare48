@@ -21,6 +21,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitPointsDecreased, int32, HitPoi
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitPointsIncreased, int32, HitPoints);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsDecreased, int32, Coins);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsIncreased, int32, Coins);
 /**
  * 
  */
@@ -103,4 +107,26 @@ private:
 	void BroadcastHitPointsDecreased(const int32 Value);
 	UFUNCTION()
 	void BroadcastHitPointsIncreased(const int32 Value);
+
+// Coins
+public:
+	UFUNCTION(BlueprintCallable, Category="Player Character|Coins")
+	void DecreaseCoins(const int32 Amount) const;
+	UFUNCTION(BlueprintCallable, Category="Player Character|Coins")
+	void IncreaseCoins(const int32 Amount) const;
+	UFUNCTION(BlueprintPure)
+	int32 GetCoins() const { return Coins->GetValue(); }
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Coins")
+	FOnCoinsDecreased OnCoinsDecreased;
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Coins")
+	FOnCoinsIncreased OnCoinsIncreased;
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|Coins", meta=(AllowPrivateAccess="true"))
+	UBaseResource* Coins{nullptr};
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|Coins", meta=(AllowPrivateAccess="true"))
+	int32 LiveCost{100};
+	UFUNCTION()
+	void BroadcastCoinsDecreased(const int32 Value);
+	UFUNCTION()
+	void BroadcastCoinsIncreased(const int32 Value);
 };
