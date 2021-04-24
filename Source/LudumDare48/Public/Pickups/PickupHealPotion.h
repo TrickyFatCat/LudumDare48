@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pickups/PickupCoin.h"
+#include "Pickups/BasePickup.h"
 #include "PickupHealPotion.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class LUDUMDARE48_API APickupHealPotion : public APickupCoin
+class LUDUMDARE48_API APickupHealPotion : public ABasePickup
 {
 	GENERATED_BODY()
 

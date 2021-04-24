@@ -2,8 +2,11 @@
 
 
 #include "Pickups/PickupHealPotion.h"
+#include "Characters/PlayerCharacter.h"
 
 void APickupHealPotion::ActivatePickupEffect(APlayerCharacter* PlayerCharacter)
 {
+	if (PlayerCharacter->GetHitPoints() == PlayerCharacter->GetMaxHitPoints()) return;
+	
 	PlayerCharacter->IncreaseLives(HealPower);
 }
