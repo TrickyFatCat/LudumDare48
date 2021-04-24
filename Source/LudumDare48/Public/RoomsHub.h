@@ -21,6 +21,9 @@ public:
 	int Scale = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
+	int MinimalDistanceBetweenStartEnd = 3;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
 	TSubclassOf<ARoom> StartRoomClass;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")

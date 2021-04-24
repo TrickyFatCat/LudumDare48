@@ -30,7 +30,7 @@ void ARoomsHub::GenerateRooms()
 	FNode* Goal = nullptr;
 	int32 GoalX = FMath::RandRange(0, Rows - 1);
 	int32 GoalY = FMath::RandRange(0, Rows - 1);
-	while (StartX == GoalX && StartY == GoalY)
+	while (std::abs(StartX - GoalX) < MinimalDistanceBetweenStartEnd || std::abs(StartY - GoalY) < MinimalDistanceBetweenStartEnd)
 	{
 		GoalX = FMath::RandRange(0, Rows - 1);
 		GoalY = FMath::RandRange(0, Rows - 1);
