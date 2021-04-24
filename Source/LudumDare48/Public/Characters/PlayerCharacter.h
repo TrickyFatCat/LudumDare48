@@ -4,8 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
+#include "Components/BaseResource.h"
+
 #include "PlayerCharacter.generated.h"
 
+class UBaseResource;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesDecreased, int32, Lives);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesIncreased, int32, Lives);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerLose);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitPointsDecreased, int32, HitPoints);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitPointsIncreased, int32, HitPoints);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDeath);
 /**
  * 
  */
@@ -35,4 +50,50 @@ private:
 	void MoveForward(const float AxisValue);
 	UFUNCTION()
 	void MoveRight(const float AxisValue);
+
+// Lives
+public:
+	UFUNCTION(BlueprintCallable, Category="Player Character|Lives")
+	void DecreaseLives(const int32 Amount) const;
+	UFUNCTION(BlueprintCallable, Category="Player Character|Lives")
+	void IncreaseLives(const int32 Amount) const;
+	UFUNCTION(BlueprintPure)
+	int32 GetLives() const { return Lives->GetValue(); }
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Lives")
+	FOnLivesDecreased OnLivesDecreased;
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Lives")
+	FOnLivesIncreased OnLivesIncreased;
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Lives")
+	FOnPlayerLose OnPlayerLose; // Called when lives <= 0
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|Lives", meta=(AllowPrivateAccess="true"))
+	UBaseResource* Lives{nullptr};
+	UFUNCTION()
+	void BroadcastLivesDecreased(const int32 Value);
+	UFUNCTION()
+	void BroadcastLivesIncreased(const int32 Value);
+
+// HitPoints
+public:
+	UFUNCTION(BlueprintCallable, Category="Player Character|HitPoints")
+	void DecreaseHitPoints(const int32 Amount) const;
+	UFUNCTION(BlueprintCallable, Category="Player Character|HitPoints")
+	void IncreaseHitPoints(const int32 Amount) const;
+	UFUNCTION(BlueprintPure)
+	int32 GetHitPoints() const { return HitPoints->GetValue(); }
+	UFUNCTION(BlueprintPure)
+	bool GetIsInvulnerable() const { return HitPoints->GetIsImmune(); }
+	UPROPERTY(BlueprintAssignable, Category="Player Character|HitPoints")
+	FOnHitPointsDecreased OnHitPointsDecreased;
+	UPROPERTY(BlueprintAssignable, Category="Player Character|HitPoints")
+	FOnHitPointsIncreased OnHitPointsIncreased;
+	UPROPERTY(BlueprintAssignable, Category="Player Character|HitPoints")
+	FOnPlayerDeath OnPlayerDeath; // Called when hit points <= 0
+private:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|HitPoints", meta=(AllowPrivateAccess="true"))
+	UBaseResource* HitPoints{nullptr};
+	UFUNCTION()
+	void BroadcastHitPointsDecreased(const int32 Value);
+	UFUNCTION()
+	void BroadcastHitPointsIncreased(const int32 Value);
 };

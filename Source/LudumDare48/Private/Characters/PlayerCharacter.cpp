@@ -14,7 +14,7 @@ APlayerCharacter::APlayerCharacter()
 	bUseControllerRotationYaw = false;
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 	AIControllerClass = nullptr;
-	
+
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
@@ -22,6 +22,12 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Lives->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastLivesDecreased);
+	Lives->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastLivesIncreased);
+
+	HitPoints->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsDecreased);
+	HitPoints->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsIncreased);
 }
 
 // Called every frame
@@ -29,6 +35,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Lives = CreateDefaultSubobject<UBaseResource>(TEXT("Lives"));
+	HitPoints = CreateDefaultSubobject<UBaseResource>(TEXT("HitPoints"));
 }
 
 // Called to bind functionality to input
@@ -65,4 +73,62 @@ void APlayerCharacter::MoveRight(const float AxisValue)
 	}
 }
 
+void APlayerCharacter::DecreaseLives(const int32 Amount) const
+{
+	Lives->DecreaseValue(Amount, false);
 
+	if (GetLives() <= 0)
+	{
+		// GAME OVER
+	}
+}
+
+void APlayerCharacter::IncreaseLives(const int32 Amount) const
+{
+	Lives->IncreaseValue(Amount, false);
+}
+
+void APlayerCharacter::BroadcastLivesDecreased(const int32 Value)
+{
+	OnLivesDecreased.Broadcast(Value);
+	
+	if (Value <= 0)
+	{
+		OnPlayerLose.Broadcast();
+	}
+}
+
+void APlayerCharacter::BroadcastLivesIncreased(const int32 Value)
+{
+	OnLivesIncreased.Broadcast(Value);
+}
+
+void APlayerCharacter::DecreaseHitPoints(const int32 Amount) const
+{
+	HitPoints->DecreaseValue(Amount, true);
+
+	if (GetHitPoints() <= 0)
+	{
+		DecreaseLives(1);
+	}
+}
+
+void APlayerCharacter::IncreaseHitPoints(const int32 Amount) const
+{
+	HitPoints->IncreaseValue(Amount, true);
+}
+
+void APlayerCharacter::BroadcastHitPointsDecreased(const int32 Value)
+{
+	OnHitPointsDecreased.Broadcast(Value);
+
+	if (Value <= 0)
+	{
+		OnPlayerDeath.Broadcast();
+	}
+}
+
+void APlayerCharacter::BroadcastHitPointsIncreased(const int32 Value)
+{
+	OnHitPointsIncreased.Broadcast(Value);
+}
