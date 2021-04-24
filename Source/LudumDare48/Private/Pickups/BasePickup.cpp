@@ -1,7 +1,7 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "BasePickup.h"
+#include "Pickups/BasePickup.h"
 #include "Characters/PlayerCharacter.h"
 
 
