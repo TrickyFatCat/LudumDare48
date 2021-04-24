@@ -14,9 +14,11 @@ ABasePickup::ABasePickup()
 
 	TriggerVolume = CreateDefaultSubobject<USphereComponent>(TEXT("TriggerVolume"));
 	RootComponent = TriggerVolume;
+	TriggerVolume->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned
