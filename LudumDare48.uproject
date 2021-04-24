@@ -3,6 +3,16 @@
 	"EngineAssociation": "4.26",
 	"Category": "",
 	"Description": "",
+	"Modules": [
+		{
+			"Name": "LudumDare48",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "OculusVR",
@@ -40,10 +50,6 @@
 		},
 		{
 			"Name": "VisualStudioCodeSourceCodeAccess",
-			"Enabled": false
-		},
-		{
-			"Name": "VisualStudioSourceCodeAccess",
 			"Enabled": false
 		},
 		{
@@ -216,5 +222,13 @@
 			"Name": "PlatformCrypto",
 			"Enabled": false
 		}
+	],
+	"TargetPlatforms": [
+		"LinuxNoEditor",
+		"LinuxAArch64NoEditor",
+		"MacNoEditor",
+		"TVOS",
+		"WindowsNoEditor",
+		"AllDesktop"
 	]
 }
