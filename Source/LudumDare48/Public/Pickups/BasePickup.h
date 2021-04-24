@@ -51,9 +51,8 @@ private:
 // Pickup effect
 public:
 	UFUNCTION(BlueprintCallable, Category="Pickup")
-	void ActivatePickup(APlayerCharacter* PlayerCharacter);
+	virtual void ActivatePickup(APlayerCharacter* PlayerCharacter);
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
 	void OnPickup();
-	virtual void ActivatePickupEffect(APlayerCharacter* PlayerCharacter);
 };

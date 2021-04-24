@@ -55,12 +55,7 @@ void ABasePickup::AnimateRotation() const
 
 void ABasePickup::ActivatePickup(APlayerCharacter* PlayerCharacter)
 {
-	ActivatePickupEffect(PlayerCharacter);
 	OnPickup();
 	Destroy();
-}
-
-void ABasePickup::ActivatePickupEffect(APlayerCharacter* PlayerCharacter)
-{
 }
 

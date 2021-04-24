@@ -3,7 +3,8 @@
 
 #include "Pickups/PickupCoin.h"
 
-void APickupCoin::ActivatePickupEffect(APlayerCharacter* PlayerCharacter)
+void APickupCoin::ActivatePickup(APlayerCharacter* PlayerCharacter)
 {
 	PlayerCharacter->IncreaseCoins(Cost);
+	Super::ActivatePickup(PlayerCharacter);
 }
