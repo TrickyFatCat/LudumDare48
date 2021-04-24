@@ -86,6 +86,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	int32 GetHitPoints() const { return HitPoints->GetValue(); }
 	UFUNCTION(BlueprintPure)
+	int32 GetMaxHitPoints() const { return HitPoints->GetMaxValue(); }
+	UFUNCTION(BlueprintPure)
 	bool GetIsInvulnerable() const { return HitPoints->GetIsImmune(); }
 	UPROPERTY(BlueprintAssignable, Category="Player Character|HitPoints")
 	FOnHitPointsDecreased OnHitPointsDecreased;
