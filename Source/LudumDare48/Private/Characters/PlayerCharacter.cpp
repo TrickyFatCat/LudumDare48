@@ -39,9 +39,6 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	Lives = CreateDefaultSubobject<UBaseResource>(TEXT("Lives"));
-	HitPoints = CreateDefaultSubobject<UBaseResource>(TEXT("HitPoints"));
 }
 
 // Called to bind functionality to input
