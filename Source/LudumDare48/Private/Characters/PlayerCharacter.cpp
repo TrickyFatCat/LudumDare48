@@ -16,6 +16,9 @@ APlayerCharacter::APlayerCharacter()
 	AIControllerClass = nullptr;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+	
+	Lives = CreateDefaultSubobject<UBaseResource>(TEXT("Lives"));
+	HitPoints = CreateDefaultSubobject<UBaseResource>(TEXT("HitPoints"));
 }
 
 // Called when the game starts or when spawned
