@@ -65,6 +65,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+
+	PlayerInputComponent->BindAction("Cast", IE_Pressed, this, &APlayerCharacter::CastMagic);
 }
 
 void APlayerCharacter::MoveForward(const float AxisValue)
@@ -203,4 +205,11 @@ void APlayerCharacter::BroadcastMagicDecreased(const int32 Value)
 void APlayerCharacter::BroadcastMagicIncreased(const int32 Value)
 {
 	OnMagicIncreased.Broadcast(Value);
+}
+
+void APlayerCharacter::CastMagic()
+{
+	DecreaseMagic(1);
+	// Do what you must to do
+	// Here we must play our anim montage
 }

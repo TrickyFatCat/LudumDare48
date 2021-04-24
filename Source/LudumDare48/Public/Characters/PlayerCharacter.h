@@ -168,4 +168,6 @@ private:
 	void BroadcastMagicDecreased(const int32 Value);
 	UFUNCTION()
 	void BroadcastMagicIncreased(const int32 Value);
+	UFUNCTION()
+	void CastMagic();
 };
