@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesDecreased, int32, Lives);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesIncreased, int32, Lives);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerLose);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnGameOver);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHitPointsDecreased, int32, HitPoints);
 
@@ -64,7 +64,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Lives")
 	FOnLivesIncreased OnLivesIncreased;
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Lives")
-	FOnPlayerLose OnPlayerLose; // Called when lives <= 0
+	FOnGameOver OnGameOver; // Called when lives <= 0
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|Lives", meta=(AllowPrivateAccess="true"))
 	UBaseResource* Lives{nullptr};
@@ -92,6 +92,13 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|HitPoints", meta=(AllowPrivateAccess="true"))
 	UBaseResource* HitPoints{nullptr};
+	UFUNCTION()
+	void ReceiveDamage(
+		AActor* DamagedActor,
+		float Damage,
+		const UDamageType* DamageType,
+		AController* InstigatedBy,
+		AActor* DamageCauser);
 	UFUNCTION()
 	void BroadcastHitPointsDecreased(const int32 Value);
 	UFUNCTION()

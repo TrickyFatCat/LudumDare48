@@ -28,6 +28,7 @@ void APlayerCharacter::BeginPlay()
 
 	HitPoints->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsDecreased);
 	HitPoints->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsIncreased);
+	OnTakeAnyDamage.AddDynamic(this, &APlayerCharacter::ReceiveDamage);
 }
 
 // Called every frame
@@ -76,11 +77,6 @@ void APlayerCharacter::MoveRight(const float AxisValue)
 void APlayerCharacter::DecreaseLives(const int32 Amount) const
 {
 	Lives->DecreaseValue(Amount, false);
-
-	if (GetLives() <= 0)
-	{
-		// GAME OVER
-	}
 }
 
 void APlayerCharacter::IncreaseLives(const int32 Amount) const
@@ -91,11 +87,6 @@ void APlayerCharacter::IncreaseLives(const int32 Amount) const
 void APlayerCharacter::BroadcastLivesDecreased(const int32 Value)
 {
 	OnLivesDecreased.Broadcast(Value);
-	
-	if (Value <= 0)
-	{
-		OnPlayerLose.Broadcast();
-	}
 }
 
 void APlayerCharacter::BroadcastLivesIncreased(const int32 Value)
@@ -116,6 +107,12 @@ void APlayerCharacter::DecreaseHitPoints(const int32 Amount) const
 void APlayerCharacter::IncreaseHitPoints(const int32 Amount) const
 {
 	HitPoints->IncreaseValue(Amount, true);
+}
+
+void APlayerCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
+	AController* InstigatedBy, AActor* DamageCauser)
+{
+	DecreaseHitPoints(Damage);
 }
 
 void APlayerCharacter::BroadcastHitPointsDecreased(const int32 Value)
