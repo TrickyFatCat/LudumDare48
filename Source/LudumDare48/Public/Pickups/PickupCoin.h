@@ -15,8 +15,8 @@ class LUDUMDARE48_API APickupCoin : public ABasePickup
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void ActivatePickupEffect(APlayerCharacter* PlayerCharacter) override;
+public:
+	virtual void ActivatePickup(APlayerCharacter* PlayerCharacter) override;
 
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Pickup|Coin", meta=(AllowPrivateAccess="true"))

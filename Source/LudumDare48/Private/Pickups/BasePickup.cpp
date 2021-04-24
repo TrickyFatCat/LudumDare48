@@ -3,6 +3,7 @@
 
 #include "Pickups/BasePickup.h"
 #include "Characters/PlayerCharacter.h"
+#include "Components/SphereComponent.h"
 
 
 // Sets default values
@@ -10,6 +11,14 @@ ABasePickup::ABasePickup()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	TriggerVolume = CreateDefaultSubobject<USphereComponent>(TEXT("TriggerVolume"));
+	RootComponent = TriggerVolume;
+	TriggerVolume->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	Mesh->SetupAttachment(RootComponent);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned
@@ -46,12 +55,7 @@ void ABasePickup::AnimateRotation() const
 
 void ABasePickup::ActivatePickup(APlayerCharacter* PlayerCharacter)
 {
-	ActivatePickupEffect(PlayerCharacter);
 	OnPickup();
 	Destroy();
-}
-
-void ABasePickup::ActivatePickupEffect(APlayerCharacter* PlayerCharacter)
-{
 }
 
