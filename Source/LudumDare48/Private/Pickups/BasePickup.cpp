@@ -15,6 +15,9 @@ ABasePickup::ABasePickup()
 	TriggerVolume = CreateDefaultSubobject<USphereComponent>(TEXT("TriggerVolume"));
 	RootComponent = TriggerVolume;
 	TriggerVolume->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	TriggerVolume->SetCollisionObjectType(ECC_WorldDynamic);
+	TriggerVolume->SetCollisionResponseToChannels(ECR_Ignore);
+	TriggerVolume->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	Mesh->SetupAttachment(RootComponent);
