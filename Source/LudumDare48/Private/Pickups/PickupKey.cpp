@@ -6,4 +6,5 @@
 void APickupKey::ActivatePickup(APlayerCharacter* PlayerCharacter)
 {
 	PlayerCharacter->AddKey(Color);
+	Super::ActivatePickup(PlayerCharacter);
 }

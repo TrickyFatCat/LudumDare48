@@ -216,7 +216,7 @@ void APlayerCharacter::CastMagic()
 
 void APlayerCharacter::AddKey(const EKeyColor KeyColor)
 {
-	if (Keys.Find(KeyColor)) return;
+	if (Keys[KeyColor]) return;
 
 	Keys.Emplace(KeyColor, true);
 	OnKeyAdded.Broadcast(KeyColor);
