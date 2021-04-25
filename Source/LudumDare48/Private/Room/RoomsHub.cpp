@@ -1,5 +1,7 @@
 #include "Room/RoomsHub.h"
 
+#include "Monster.h"
+
 DEFINE_LOG_CATEGORY_STATIC(LogRoomsHub, All, All)
 
 ARoomsHub::ARoomsHub()
@@ -36,6 +38,18 @@ void ARoomsHub::GenerateRooms()
 		GoalX = FMath::RandRange(0, Rows - 1);
 		GoalY = FMath::RandRange(0, Rows - 1);
 	}
+
+	int32 MonsterX = FMath::RandRange(0, Rows - 1);
+	int32 MonsterY = FMath::RandRange(0, Rows - 1);
+	while (
+		std::abs(StartX - MonsterX) < MinimalDistanceBetweenStartEnd ||
+		std::abs(StartY - MonsterY) < MinimalDistanceBetweenStartEnd
+	)
+	{
+		MonsterX = FMath::RandRange(0, Rows - 1);
+		MonsterY = FMath::RandRange(0, Rows - 1);
+	}
+	
 
 	for (int i = 0; i < Rows; i++)
 	{
@@ -75,6 +89,21 @@ void ARoomsHub::GenerateRooms()
 	CreateLinks();
 	const std::deque<FNode*> Path = Graph->PathBfs(Start, Goal);
 	UpdateMainPath(Path);
+
+
+		AMonster* Monster = World->SpawnActorDeferred<AMonster>(
+		MonsterClass,
+		FTransform(FRotator::ZeroRotator, FVector::ZeroVector));
+		if (!Monster) return;;
+
+		FTransform PositionMonster = FTransform(
+			FRotator::ZeroRotator,
+			FVector(100.0f * MonsterY * Scale, 100.0f * MonsterX * Scale, 300.0f)
+		);
+		Monster->Position = FRoomPosition(MonsterX, MonsterY);
+		Monster->Graph = Graph;
+		Monster->Grid = Grid;
+		Monster->FinishSpawning(PositionMonster);	
 }
 
 void ARoomsHub::CreateLinks() const

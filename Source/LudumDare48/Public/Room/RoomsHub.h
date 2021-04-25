@@ -4,6 +4,8 @@
 
 #include "Graph.h"
 #include "GameFramework/Actor.h"
+
+#include "Monster.h"
 #include "RoomsHub.generated.h"
 
 UCLASS()
@@ -37,6 +39,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
 	TSubclassOf<ARoom> ObstacleRoomClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
+	TSubclassOf<AMonster> MonsterClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
 	bool IsRenderPath;
