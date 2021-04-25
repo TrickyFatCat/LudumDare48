@@ -2,6 +2,7 @@
 
 #include <Shape.h>
 
+#include "Characters/PlayerCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -19,10 +20,11 @@ ARoom::ARoom()
 
 		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
 		Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
-		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		Portals[i]->SetCollisionObjectType(ECC_WorldDynamic);
 		Portals[i]->SetCollisionResponseToChannels(ECR_Ignore);
 		Portals[i]->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+		Portals[i]->OnComponentBeginOverlap.AddDynamic(this, &ARoom::MovePortal);
 		
 
 		FVector NewRelativeLocation{FVector::ZeroVector};
@@ -109,4 +111,14 @@ void ARoom::UpdateColor(const FLinearColor Color) const
 
 	UMaterialInstanceDynamic* DynMaterial = Components[0]->CreateAndSetMaterialInstanceDynamic(0);
 	if (DynMaterial) DynMaterial->SetVectorParameterValue("Base Color", Color);
+}
+
+
+void ARoom::MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor);
+
+	if (Player == nullptr) return;
+	
 }
