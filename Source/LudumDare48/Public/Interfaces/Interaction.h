@@ -25,5 +25,5 @@ class LUDUMDARE48_API IInteraction
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Interaction Interface")
-	void ProcessInteraction(APlayerCharacter* PlayerCharacter);
+	bool ProcessInteraction(APlayerCharacter* PlayerCharacter);
 };
