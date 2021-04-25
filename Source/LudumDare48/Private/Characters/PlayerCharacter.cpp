@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interfaces/Interaction.h"
 #include "Pickups/BasePickup.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -38,6 +39,8 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::ActivatePickup);
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::AddToInteractionQueue);
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::RemoveFromInteractionQueue);
 
 	Lives->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastLivesDecreased);
 	Lives->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastLivesIncreased);
@@ -67,6 +70,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
 	PlayerInputComponent->BindAction("Cast", IE_Pressed, this, &APlayerCharacter::CastMagic);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 }
 
 void APlayerCharacter::MoveForward(const float AxisValue)
@@ -227,4 +231,42 @@ bool APlayerCharacter::HasKey(const EKeyColor KeyColor)
 	if (Keys.Num() == 0 || Keys.Find(KeyColor) == nullptr) return false;
 	
 	return static_cast<bool>(Keys.Find(KeyColor));
+}
+
+void APlayerCharacter::AddToInteractionQueue(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (!IsValid(OtherActor)) return;
+
+	if (!OtherActor->GetClass()->ImplementsInterface(UInteraction::StaticClass())) return;
+
+	InteractionQueue.Add(OtherActor);
+}
+
+void APlayerCharacter::RemoveFromInteractionQueue(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (InteractionQueue.Find(OtherActor))
+	{
+		InteractionQueue.Remove(OtherActor);
+	}
+}
+
+void APlayerCharacter::Interact()
+{
+	if (InteractionQueue.Num() == 0) return;
+
+	AActor* TargetActor = InteractionQueue.Array()[0];
+
+	if (!IsValid(TargetActor)) return;
+
+	while (!IsValid(TargetActor))
+	{
+		InteractionQueue.Remove(TargetActor);
+		TargetActor = InteractionQueue.Array()[0];
+
+		if (InteractionQueue.Num() == 0) return;
+	}
+	
+	IInteraction::Execute_ProcessInteraction(TargetActor, this);
 }
