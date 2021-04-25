@@ -10,6 +10,14 @@
 
 class UBaseResource;
 
+UENUM(BlueprintType)
+enum class EKeyColor : uint8
+{
+	RED,
+	GREEN,
+	BLUE
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesDecreased, int32, Lives);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnLivesIncreased, int32, Lives);
@@ -170,4 +178,16 @@ private:
 	void BroadcastMagicIncreased(const int32 Value);
 	UFUNCTION()
 	void CastMagic();
+	
+	// Keys
+public:
+	UFUNCTION(BlueprintCallable, Category="Player Character|Keys")
+	void AddKey(const EKeyColor KeyColor);
+	UFUNCTION(BlueprintPure, Category="Player Character|Keys")
+	TMap<EKeyColor, bool> GetKeys() const { return Keys; }
+	UFUNCTION(BlueprintPure, Category="Player Character|Keys")
+	bool HasKey(const EKeyColor KeyColor);
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintGetter=GetKeys, Category="Player Character|Keys", meta=(AllowPrivateAccess="true"))
+	TMap<EKeyColor, bool> Keys{{EKeyColor::RED, false}, {EKeyColor::GREEN, false}, {EKeyColor::BLUE, false}};
 };

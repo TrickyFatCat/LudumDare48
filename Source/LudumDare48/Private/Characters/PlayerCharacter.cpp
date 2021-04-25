@@ -213,3 +213,17 @@ void APlayerCharacter::CastMagic()
 	// Do what you must to do
 	// Here we must play our anim montage
 }
+
+void APlayerCharacter::AddKey(const EKeyColor KeyColor)
+{
+	if (Keys.Find(KeyColor)) return;
+
+	Keys.Emplace(KeyColor, true);
+}
+
+bool APlayerCharacter::HasKey(const EKeyColor KeyColor)
+{
+	if (Keys.Num() == 0 || Keys.Find(KeyColor) == nullptr) return false;
+	
+	return static_cast<bool>(Keys.Find(KeyColor));
+}
