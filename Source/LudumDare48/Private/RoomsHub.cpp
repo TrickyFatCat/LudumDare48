@@ -61,7 +61,8 @@ void ARoomsHub::GenerateRooms()
 				FRotator::ZeroRotator,
 				FVector(100.0f * j * Scale, 100.0f * i * Scale, 0.0f)
 			);
-			Room->IsObstacle = RoomClass == ObstacleRoomClass ? true : false;
+			Room->SetProperties(FRoomProperties(RoomClass == ObstacleRoomClass ? true : false));
+			Room->SetPosition(FRoomPosition(i, j));
 			Room->FinishSpawning(Position);
 
 			Grid[i].Add(new FNode(Room));
@@ -75,8 +76,7 @@ void ARoomsHub::GenerateRooms()
 
 	CreateLinks(Graph, Grid);
 	const std::deque<FNode*> Path = Graph->PathBfs(Start, Goal);
-
-	if (IsRenderPath) TestUpdateColor(Path);
+	UpdateMainPath(Path);
 }
 
 void ARoomsHub::CreateLinks(FGraph* Graph, TArray<TArray<FNode*>> Grid) const
@@ -88,39 +88,42 @@ void ARoomsHub::CreateLinks(FGraph* Graph, TArray<TArray<FNode*>> Grid) const
 			if ((i - 1) > 0)
 			{
 				Graph->Connect(Grid[i - 1][j], Grid[i][j]);
-				if (!Grid[i - 1][j]->IsObstacle) Grid[i][j]->Value->PortalDirection[0] = Grid[i - 1][j]->Value;
+				if (!Grid[i - 1][j]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(North, Grid[i - 1][j]->Value, false);
 			}
-			else if (!Grid[Rows - 1][j]->IsObstacle) Grid[i][j]->Value->PortalDirection[0] = Grid[Rows - 1][j]->Value;
+			else if (!Grid[Rows - 1][j]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(North, Grid[Rows - 1][j]->Value, false);
 
 			if (i + 1 < Rows)
 			{
 				Graph->Connect(Grid[i + 1][j], Grid[i][j]);
-				if (!Grid[i + 1][j]->IsObstacle) Grid[i][j]->Value->PortalDirection[2] = Grid[i + 1][j]->Value;
+				if (!Grid[i + 1][j]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(South, Grid[i + 1][j]->Value, false);
 			}
-			else if (!Grid[0][j]->IsObstacle) Grid[i][j]->Value->PortalDirection[2] = Grid[0][j]->Value;
+			else if (!Grid[0][j]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(South, Grid[0][j]->Value, false);
 
 			if (j - 1 > 0)
 			{
 				Graph->Connect(Grid[i][j - 1], Grid[i][j]);
-				if (!Grid[i][j - 1]->IsObstacle) Grid[i][j]->Value->PortalDirection[3] = Grid[i][j - 1]->Value;
+				if (!Grid[i][j - 1]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(West, Grid[i][j - 1]->Value, false);
 			}
-			else if (!Grid[i][Rows - 1]->IsObstacle) Grid[i][j]->Value->PortalDirection[3] = Grid[i][Rows - 1]->Value;
+			else if (!Grid[i][Rows - 1]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(West, Grid[i][Rows - 1]->Value, false);
 
 
 			if (j + 1 < Rows)
 			{
 				Graph->Connect(Grid[i][j + 1], Grid[i][j]);
-				if (!Grid[i][j + 1]->IsObstacle) Grid[i][j]->Value->PortalDirection[1] = Grid[i][j + 1]->Value;
+				if (!Grid[i][j + 1]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(East, Grid[i][j + 1]->Value, false);
 			}
-			else if (!Grid[i][0]->IsObstacle) Grid[i][j]->Value->PortalDirection[1] = Grid[i][0]->Value;
+			else if (!Grid[i][0]->IsObstacle) Grid[i][j]->Value->SetPortalDirection(East, Grid[i][0]->Value, false);
 		}
 	}
 }
 
-void ARoomsHub::TestUpdateColor(std::deque<FNode*> Path)
+void ARoomsHub::UpdateMainPath(std::deque<FNode*> Path) const
 {
 	for (auto N : Path)
 	{
-		if (*Path.begin() != N) N->Value->UpdateColor(FLinearColor::Yellow);
+		if (IsRenderPath && *Path.begin() != N) N->Value->UpdateColor(FLinearColor::Yellow);
+		FRoomProperties c = N->Value->Properties();
+		c.IsMainPath = true;
+		N->Value->SetProperties(c);
 	}
 }

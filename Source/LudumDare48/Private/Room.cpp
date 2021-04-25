@@ -12,11 +12,16 @@ void ARoom::BeginPlay()
 	Super::BeginPlay();
 }
 
-
-// Called every frame
-void ARoom::Tick(const float DeltaTime)
+void ARoom::SetPortalDirection(const EPortalDirection Direction, ARoom* Room, const bool IsMainPath = false)
 {
-	Super::Tick(DeltaTime);
+	PortalDirection[Direction] = new FRoomPortal(Room, IsMainPath);
+}
+
+TArray<FRoomPortal> ARoom::GetPortalDirection()
+{
+	TArray<FRoomPortal> Result;
+	for (auto D : PortalDirection) Result.Add(*D);
+	return Result;
 }
 
 
@@ -28,12 +33,4 @@ void ARoom::UpdateColor(const FLinearColor Color) const
 
 	UMaterialInstanceDynamic* DynMaterial = Components[0]->CreateAndSetMaterialInstanceDynamic(0);
 	if (DynMaterial) DynMaterial->SetVectorParameterValue("Base Color", Color);
-}
-
-TArray<ARoom*> ARoom::GetPortalDirection()
-{
-	TArray<ARoom*> Result;
-	for (auto D : PortalDirection) Result.Add(D);
-
-	return Result;
 }

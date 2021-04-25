@@ -4,7 +4,7 @@
 
 FNode::FNode(ARoom* Value) {
 	this->Value = Value;
-	this->IsObstacle = Value->IsObstacle;
+	this->IsObstacle = Value->Properties().IsObstacle;
 
 	Visited = false;
 	BfsParent = nullptr;
