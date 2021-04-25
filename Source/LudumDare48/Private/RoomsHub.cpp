@@ -119,11 +119,30 @@ void ARoomsHub::CreateLinks(FGraph* Graph, TArray<TArray<FNode*>> Grid) const
 
 void ARoomsHub::UpdateMainPath(std::deque<FNode*> Path) const
 {
+	ARoom* Last = nullptr;
 	for (auto N : Path)
 	{
 		if (IsRenderPath && *Path.begin() != N) N->Value->UpdateColor(FLinearColor::Yellow);
+
 		FRoomProperties c = N->Value->Properties();
 		c.IsMainPath = true;
 		N->Value->SetProperties(c);
+
+		if (Last)
+		{
+			for(const auto P : Last->PortalDirections())
+			{
+				if (P.Room != N->Value) continue;
+				Last->SetPortalDirection(P.Direction, P.Room, true);
+			}
+
+			for(const auto P : N->Value->PortalDirections())
+			{
+				if (P.Room != Last) continue;
+				N->Value->SetPortalDirection(P.Direction, P.Room, true);
+			}	
+		}
+
+		Last = N->Value;
 	}
 }

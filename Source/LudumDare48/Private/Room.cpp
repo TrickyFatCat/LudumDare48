@@ -14,13 +14,13 @@ void ARoom::BeginPlay()
 
 void ARoom::SetPortalDirection(const EPortalDirection Direction, ARoom* Room, const bool IsMainPath = false)
 {
-	PortalDirection[Direction] = new FRoomPortal(Room, IsMainPath);
+	PortalDirection[Direction] = FRoomPortal(Direction, Room, IsMainPath);
 }
 
-TArray<FRoomPortal> ARoom::GetPortalDirection()
+TArray<FRoomPortal> ARoom::GetPortalDirections()
 {
 	TArray<FRoomPortal> Result;
-	for (auto D : PortalDirection) Result.Add(*D);
+	for (auto D : PortalDirection) Result.Add(D);
 	return Result;
 }
 

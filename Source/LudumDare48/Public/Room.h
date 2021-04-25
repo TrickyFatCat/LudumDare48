@@ -1,6 +1,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
+#include <array>
+
 #include "GameFramework/Actor.h"
 #include "Room.generated.h"
 
@@ -53,13 +56,16 @@ struct FRoomPortal
 {
 	GENERATED_USTRUCT_BODY()
 
-	FRoomPortal(): Room(nullptr) {}
-	FRoomPortal(ARoom* Room, const bool IsMainPath)
+	FRoomPortal(): Direction(), Room(nullptr) {}
+	FRoomPortal(const EPortalDirection Direction, ARoom* Room, const bool IsMainPath)
 	{
+		this->Direction = Direction;
 		this->Room = Room;
 		this->IsMainPath = IsMainPath;
-	};
+	}
 
+	EPortalDirection Direction;
+	
 	UPROPERTY(EditAnywhere)
 	ARoom* Room;
 
@@ -75,7 +81,7 @@ class LUDUMDARE48_API ARoom : public AActor
 private:
 	FRoomPosition RoomPosition;
 	FRoomProperties RoomProperties;
-	FRoomPortal* PortalDirection[4];
+	std::array<FRoomPortal, 4> PortalDirection;
 
 protected:
 	virtual void BeginPlay() override;
@@ -90,8 +96,9 @@ public:
 	void SetProperties(const FRoomProperties Properties) { RoomProperties = Properties; }
 
 	UFUNCTION(BlueprintPure, BlueprintCallable)
-	TArray<FRoomPortal> GetPortalDirection();
+	TArray<FRoomPortal> GetPortalDirections();
 
+	std::array<FRoomPortal, 4> PortalDirections() { return PortalDirection; }
 	void SetPortalDirection(const EPortalDirection Direction, ARoom* Room, const bool IsMainPath);
 
 	void UpdateColor(FLinearColor Color) const;
