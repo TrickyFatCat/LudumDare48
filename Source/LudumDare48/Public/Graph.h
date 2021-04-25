@@ -4,7 +4,7 @@
 #include <vector>
 #include <deque>
 
-#include "Room.h"
+#include "Room/Room.h"
 
 class LUDUMDARE48_API FNode {
 public:

@@ -10,7 +10,7 @@ UCLASS()
 class LUDUMDARE48_API ARoomsHub : public AActor
 {
 	GENERATED_BODY()
-	
+
 public:	
 	ARoomsHub();
 
@@ -41,10 +41,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
 	bool IsRenderPath;
 
+	UFUNCTION(BlueprintCallable)
+	TArray<ARoom*> PathBetween(FRoomPosition Start, FRoomPosition End);
 
 protected:
+	FGraph* Graph;
+	TArray<TArray<FNode*>> Grid;
+	
 	virtual void BeginPlay() override;
 	void GenerateRooms();
-	void CreateLinks(FGraph* Graph, TArray<TArray<FNode*>> Grid) const;
+	void CreateLinks() const;
 	void UpdateMainPath(std::deque<FNode*> Path) const;
 };
