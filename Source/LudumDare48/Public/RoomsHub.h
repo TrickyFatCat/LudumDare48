@@ -46,6 +46,5 @@ protected:
 	virtual void BeginPlay() override;
 	void GenerateRooms();
 	void CreateLinks(FGraph* Graph, TArray<TArray<FNode*>> Grid) const;
-	
-	void TestUpdateColor(std::deque<FNode*> Path);
+	void UpdateMainPath(std::deque<FNode*> Path) const;
 };
