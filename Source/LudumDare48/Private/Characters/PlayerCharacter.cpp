@@ -219,6 +219,7 @@ void APlayerCharacter::AddKey(const EKeyColor KeyColor)
 	if (Keys.Find(KeyColor)) return;
 
 	Keys.Emplace(KeyColor, true);
+	OnKeyAdded.Broadcast(KeyColor);
 }
 
 bool APlayerCharacter::HasKey(const EKeyColor KeyColor)

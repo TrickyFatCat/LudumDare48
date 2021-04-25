@@ -37,6 +37,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCoinsIncreased, int32, Coins);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMagicDecreased, int32, Coins);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMagicIncreased, int32, Coins);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeyAdded, EKeyColor, KeyColor);
 /**
  * 
  */
@@ -187,6 +189,8 @@ public:
 	TMap<EKeyColor, bool> GetKeys() const { return Keys; }
 	UFUNCTION(BlueprintPure, Category="Player Character|Keys")
 	bool HasKey(const EKeyColor KeyColor);
+	UPROPERTY(BlueprintAssignable, Category="Player Character|Keys")
+	FOnKeyAdded OnKeyAdded;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, BlueprintGetter=GetKeys, Category="Player Character|Keys", meta=(AllowPrivateAccess="true"))
 	TMap<EKeyColor, bool> Keys{{EKeyColor::RED, false}, {EKeyColor::GREEN, false}, {EKeyColor::BLUE, false}};
