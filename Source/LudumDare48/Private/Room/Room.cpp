@@ -6,6 +6,8 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogRoom, All, All)
+
 ARoom::ARoom()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -46,8 +48,10 @@ ARoom::ARoom()
 			NewRelativeLocation = FVector(-500.f, 0.f, 50.f);
 			break;
 		}
+
 		
 		Portals[i]->SetRelativeLocation(NewRelativeLocation);
+
 		
 		PlayerSpawnPoints.Add(CreateDefaultSubobject<UArrowComponent>(SpawnName));
 		PlayerSpawnPoints[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
@@ -117,12 +121,9 @@ void ARoom::UpdateColor(const FLinearColor Color) const
 	if (DynMaterial) DynMaterial->SetVectorParameterValue("Base Color", Color);
 }
 
-
 void ARoom::MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	APlayerCharacter* Player = Cast<APlayerCharacter>(OtherActor);
-
-	if (Player == nullptr) return;
-	
+	//UE_LOG(LogRoom, Error, TEXT("Timer finished: %s"),);
+	UE_LOG(LogRoom, Display, TEXT("%s"), *OtherActor->GetName());
 }
