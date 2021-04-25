@@ -27,8 +27,13 @@ void ARoom::UpdateColor(const FLinearColor Color) const
 	if (!Components[0]) return;
 
 	UMaterialInstanceDynamic* DynMaterial = Components[0]->CreateAndSetMaterialInstanceDynamic(0);
-	if (DynMaterial)
-	{
-		DynMaterial->SetVectorParameterValue("Base Color", Color);
-	}
+	if (DynMaterial) DynMaterial->SetVectorParameterValue("Base Color", Color);
+}
+
+TArray<ARoom*> ARoom::GetPortalDirection()
+{
+	TArray<ARoom*> Result;
+	for (auto D : PortalDirection) Result.Add(D);
+
+	return Result;
 }
