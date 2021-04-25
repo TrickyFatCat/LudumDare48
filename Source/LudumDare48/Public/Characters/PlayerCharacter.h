@@ -39,6 +39,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMagicDecreased, int32, Coins);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMagicIncreased, int32, Coins);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnKeyAdded, EKeyColor, KeyColor);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartSpawn);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerWin);
 /**
  * 
  */
@@ -61,6 +65,11 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category="Player Character|Spawn")
+	FOnStartSpawn OnPlayerStartSpawn;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, Category="Player Character|Spawn")
+	FOnPlayerWin OnPlayerWin;
 
 	// Movement
 private:
