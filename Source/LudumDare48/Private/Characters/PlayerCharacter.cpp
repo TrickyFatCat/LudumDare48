@@ -268,5 +268,5 @@ void APlayerCharacter::Interact()
 		if (InteractionQueue.Num() == 0) return;
 	}
 	
-	IInteraction::Execute_ProcessInteraction(TargetActor, this);
+	const bool InteractionResult = IInteraction::Execute_ProcessInteraction(TargetActor, this);
 }
