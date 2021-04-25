@@ -147,7 +147,7 @@ void APlayerCharacter::IncreaseHitPoints(const int32 Amount) const
 void APlayerCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType,
 	AController* InstigatedBy, AActor* DamageCauser)
 {
-	DecreaseHitPoints(Damage);
+	DecreaseLives(Damage);
 }
 
 void APlayerCharacter::BroadcastHitPointsDecreased(const int32 Value)
