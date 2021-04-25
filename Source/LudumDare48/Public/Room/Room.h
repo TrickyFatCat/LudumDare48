@@ -6,6 +6,8 @@
 
 #include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
+#include "Portal/Portal.h"
+
 #include "Room.generated.h"
 
 class ARoom;
@@ -88,11 +90,11 @@ private:
 	USceneComponent* Floor{nullptr};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Floor", meta=(AllowPrivateAccess="true"))
 	USceneComponent* CameraAnchor{nullptr};
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Portals", meta=(AllowPrivateAccess="true"))
+	TArray<UBoxComponent*> Portals{};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="PlayerSpawn", meta=(AllowPrivateAccess="true"))
 	TArray<UArrowComponent*> PlayerSpawnPoints{};
-	
-	// UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Camera", meta=(AllowPrivateAccess = "true"))
-	// UCameraComponent* Camera{nullptr};
 
 protected:
 	virtual void BeginPlay() override;

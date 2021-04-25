@@ -1,48 +1,81 @@
 #include "Room/Room.h"
+
+#include <Shape.h>
+
+#include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
 ARoom::ARoom()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	/**
-	Floor = CreateDefaultSubobject<USceneComponent>(TEXT("Floor"));
-	RootComponent = Floor;
-
-	CameraAnchor = CreateDefaultSubobject<USceneComponent>(TEXT("CameraAnchor"));
-	CameraAnchor->SetupAttachment(RootComponent);
-
+	USceneComponent* Root = CreateDefaultSubobject<USceneComponent>(TEXT("Floor"));
+	Root->SetupAttachment(RootComponent);
+	
 	for (int i = 0; i < 4; ++i)
 	{
-		const FName ComponentName = FName(TEXT("PlayerEnterPoint"), i + 1);
-		PlayerSpawnPoints.Add(CreateDefaultSubobject<UArrowComponent>(ComponentName));
-		UArrowComponent* PlayerEnterPoint = PlayerSpawnPoints[i];
+		const FName PortalName = FName(TEXT("Portal"), i + 1);
+		const FName SpawnName = FName(TEXT("PlayerSpawnPoint"), i + 1);
+
+		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
+		Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
+		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		Portals[i]->SetCollisionObjectType(ECC_WorldDynamic);
+		Portals[i]->SetCollisionResponseToChannels(ECR_Ignore);
+		Portals[i]->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+		
+
 		FVector NewRelativeLocation{FVector::ZeroVector};
 
 		switch (i)
 		{
 		case 0:
-			NewRelativeLocation = FVector(0.f, -600.f, 50.f);
+			NewRelativeLocation = FVector(0.f, -500.f, 50.f);
 			break;
 
 		case 1:
-			NewRelativeLocation = FVector(600.f, 0.f, 50.f);
+			NewRelativeLocation = FVector(500.f, 0.f, 50.f);
 			break;
 
 		case 2:
-			NewRelativeLocation = FVector(0.f, 600.f, 50.f);
+			NewRelativeLocation = FVector(0.f, 500.f, 50.f);
 			break;
 
 		case 3:
-			NewRelativeLocation = FVector(-600.f, 0.f, 50.f);
+			NewRelativeLocation = FVector(-500.f, 0.f, 50.f);
 			break;
 		}
-    	
-		PlayerEnterPoint->SetRelativeLocation(NewRelativeLocation);
-		PlayerEnterPoint->SetRelativeRotation(UKismetMathLibrary::FindLookAtRotation(NewRelativeLocation, FVector::ZeroVector));
-	
+		
+		Portals[i]->SetRelativeLocation(NewRelativeLocation);
+		
+		PlayerSpawnPoints.Add(CreateDefaultSubobject<UArrowComponent>(SpawnName));
+		PlayerSpawnPoints[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
+		PlayerSpawnPoints[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		switch (i)
+		{
+		case 0:
+			NewRelativeLocation = FVector(0.f, 450.f, 100.f);
+			break;
+
+		case 1:
+			NewRelativeLocation = FVector(-450.f, 0.f, 100.f);
+			break;
+
+		case 2:
+			NewRelativeLocation = FVector(0.f, -450.f, 100.f);
+			
+			break;
+
+		case 3:
+			NewRelativeLocation = FVector(450.f, 0.f, 100.f);
+			break;
+		}
+
+		PlayerSpawnPoints[i]->SetRelativeLocation(NewRelativeLocation);
+		PlayerSpawnPoints[i]->SetRelativeRotation(UKismetMathLibrary::FindLookAtRotation(NewRelativeLocation, FVector::ZeroVector));
 	}
-	*/
+	
 	// Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	// Camera->SetupAttachment(GetRootComponent());
 	// Camera->SetRelativeLocation(FVector(-1600.f, 1600.f, 2280.f));
