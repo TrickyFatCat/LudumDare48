@@ -1,4 +1,4 @@
-#include "RoomsHub.h"
+#include "Room/RoomsHub.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRoomsHub, All, All)
 

@@ -4,6 +4,7 @@
 
 #include <array>
 
+#include "Components/ArrowComponent.h"
 #include "GameFramework/Actor.h"
 #include "Room.generated.h"
 
@@ -82,6 +83,16 @@ private:
 	FRoomPosition RoomPosition;
 	FRoomProperties RoomProperties;
 	std::array<FRoomPortal, 4> PortalDirection;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Root", meta=(AllowPrivateAccess="true"))
+	USceneComponent* Floor{nullptr};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Floor", meta=(AllowPrivateAccess="true"))
+	USceneComponent* CameraAnchor{nullptr};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="PlayerSpawn", meta=(AllowPrivateAccess="true"))
+	TArray<UArrowComponent*> PlayerSpawnPoints{};
+	
+	// UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Camera", meta=(AllowPrivateAccess = "true"))
+	// UCameraComponent* Camera{nullptr};
 
 protected:
 	virtual void BeginPlay() override;
