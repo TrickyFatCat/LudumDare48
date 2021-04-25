@@ -196,7 +196,6 @@ void ABaseDoor::SetDoorTransform(const float Progress)
 		FTransform TargetTransform = TargetTransforms[TransformIndex++];
 		NewTransform.SetLocation(NewTransform.GetLocation() + TargetTransform.GetLocation() * Progress);
 		NewTransform.SetRotation(NewTransform.GetRotation() + TargetTransform.GetRotation() * Progress);
-		NewTransform.SetScale3D(NewTransform.GetScale3D() + TargetTransform.GetScale3D() * Progress);
 		DoorLeaf->SetWorldTransform(NewTransform);
 	}
 }
