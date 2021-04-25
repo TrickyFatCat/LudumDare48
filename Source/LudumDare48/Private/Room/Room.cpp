@@ -24,7 +24,6 @@ ARoom::ARoom()
 		Portals[i]->SetCollisionObjectType(ECC_WorldDynamic);
 		Portals[i]->SetCollisionResponseToChannels(ECR_Ignore);
 		Portals[i]->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-		Portals[i]->OnComponentBeginOverlap.AddDynamic(this, &ARoom::MovePortal);
 		
 
 		FVector NewRelativeLocation{FVector::ZeroVector};
@@ -88,6 +87,11 @@ ARoom::ARoom()
 void ARoom::BeginPlay()
 {
 	Super::BeginPlay();
+
+	for (auto P : Portals)
+	{
+		P->OnComponentBeginOverlap.AddDynamic(this, &ARoom::MovePortal);
+	}
 }
 
 void ARoom::SetPortalDirection(const EPortalDirection Direction, ARoom* Room, const bool IsMainPath = false)
