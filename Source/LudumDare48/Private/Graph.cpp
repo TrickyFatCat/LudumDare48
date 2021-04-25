@@ -36,6 +36,7 @@ void FGraph::AddNode(FNode* Node) {
 void FGraph::SetAllVisitedFlag(const bool Flag) {
 	for (auto& N : Nodes) {
 		N->Visited = Flag;
+		N->BfsParent = nullptr;
 	}
 }
 
@@ -67,6 +68,9 @@ FNode* FGraph::Bfs(FNode* Start, ARoom* Value) {
 }
 
 std::deque<FNode*> FGraph::PathBfs(FNode* Start, FNode* Goal) {
+
+	if(Start->IsObstacle == true || Goal->IsObstacle == true) return {};
+ 
 	SetAllVisitedFlag(false);
 	std::deque<FNode*> Q;
 	std::deque<FNode*> Path;

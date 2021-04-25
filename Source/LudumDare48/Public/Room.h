@@ -29,10 +29,10 @@ struct FRoomPosition
 		PositionY = Y;
 	};
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int PositionX;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int PositionY;
 };
 

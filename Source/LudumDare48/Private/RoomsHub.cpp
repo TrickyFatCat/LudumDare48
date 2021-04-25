@@ -1,10 +1,11 @@
 #include "RoomsHub.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogRoomsHub, All, All)
+
 ARoomsHub::ARoomsHub()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
-
 
 void ARoomsHub::BeginPlay()
 {
@@ -17,11 +18,8 @@ void ARoomsHub::GenerateRooms()
 {
 	UWorld* World = GetWorld();
 	if (!World) return;
-
-	TArray<TArray<FNode*>> Grid;
 	Grid.Init(*new TArray<FNode*>(), Rows);
-
-	FGraph* Graph = nullptr;
+	Graph = nullptr;
 
 	FNode* Start = nullptr;
 	const int32 StartX = FMath::RandRange(0, Rows - 1);
@@ -59,7 +57,7 @@ void ARoomsHub::GenerateRooms()
 
 			FTransform Position = FTransform(
 				FRotator::ZeroRotator,
-				FVector(100.0f * j * Scale, 100.0f * i * Scale, 0.0f)
+				FVector(100.0f * j * Scale, 100.0f * i * Scale, 50.0f)
 			);
 			Room->SetProperties(FRoomProperties(RoomClass == ObstacleRoomClass ? true : false));
 			Room->SetPosition(FRoomPosition(i, j));
@@ -74,12 +72,12 @@ void ARoomsHub::GenerateRooms()
 		}
 	}
 
-	CreateLinks(Graph, Grid);
+	CreateLinks();
 	const std::deque<FNode*> Path = Graph->PathBfs(Start, Goal);
 	UpdateMainPath(Path);
 }
 
-void ARoomsHub::CreateLinks(FGraph* Graph, TArray<TArray<FNode*>> Grid) const
+void ARoomsHub::CreateLinks() const
 {
 	for (int i = 0; i < Rows; i++)
 	{
@@ -146,3 +144,17 @@ void ARoomsHub::UpdateMainPath(std::deque<FNode*> Path) const
 		Last = N->Value;
 	}
 }
+
+
+TArray<ARoom*> ARoomsHub::PathBetween(const FRoomPosition Start, const FRoomPosition End)
+{
+	const std::deque<FNode*> Path = Graph->PathBfs(
+		Grid[Start.PositionX][Start.PositionY],
+		Grid[End.PositionX][End.PositionY]
+		);
+	TArray<ARoom*> Array;
+	for (auto P : Path) Array.Add(P->Value);
+	
+	return Array;
+}
+
