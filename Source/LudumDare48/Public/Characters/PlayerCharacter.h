@@ -95,7 +95,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Lives")
 	FOnGameOver OnGameOver; // Called when lives <= 0
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Player Character|Lives", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta=(AllowPrivateAccess="true"))
 	UBaseResource* Lives{nullptr};
 	UFUNCTION()
 	void BroadcastLivesDecreased(const int32 Value);
@@ -121,7 +121,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Player Character|HitPoints")
 	FOnPlayerDeath OnPlayerDeath; // Called when hit points <= 0
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Player Character|HitPoints",
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components",
 		meta=(AllowPrivateAccess="true"))
 	UBaseResource* HitPoints{nullptr};
 	UFUNCTION()
@@ -150,7 +150,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Coins")
 	FOnCoinsIncreased OnCoinsIncreased;
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Player Character|Coins", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta=(AllowPrivateAccess="true"))
 	UBaseResource* Coins{nullptr};
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Player Character|Coins", meta=(AllowPrivateAccess="true"))
 	int32 LiveCost{100};
@@ -172,7 +172,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Player Character|Magic")
 	FOnMagicIncreased OnMagicIncreased;
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Player Character|Magic", meta=(AllowPrivateAccess="true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta=(AllowPrivateAccess="true"))
 	UBaseResource* Magic{nullptr};
 	UFUNCTION()
 	void BroadcastMagicDecreased(const int32 Value);
