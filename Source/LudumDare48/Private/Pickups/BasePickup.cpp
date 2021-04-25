@@ -58,4 +58,3 @@ void ABasePickup::ActivatePickup(APlayerCharacter* PlayerCharacter)
 	OnPickup();
 	Destroy();
 }
-
