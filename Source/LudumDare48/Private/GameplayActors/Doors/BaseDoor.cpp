@@ -4,6 +4,7 @@
 #include "GameplayActors/Doors/BaseDoor.h"
 
 #include "Components/TimelineComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABaseDoor::ABaseDoor()
@@ -47,6 +48,23 @@ void ABaseDoor::Tick(float DeltaTime)
 
 bool ABaseDoor::OpenDoor()
 {
+	if (RequiredKeys.Num() > 0)
+	{
+		bool bCanOpen = true;
+		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(),0));
+		
+		for(EKeyColor Key : RequiredKeys)
+		{
+			if (!Player->GetKeys()[Key])
+			{
+				bCanOpen = false;
+				break;
+			}
+		}
+
+		if (!bCanOpen) return false;
+	}
+	
 	if (CurrentState == EDoorState::Locked || CurrentState == EDoorState::Disabled || CurrentState == EDoorState::Opened
 )
 	{

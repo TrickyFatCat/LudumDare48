@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Characters/PlayerCharacter.h"
 #include "BaseDoor.generated.h"
 
 class UTimelineComponent;
@@ -159,10 +160,13 @@ private:
 	void FinishTransition();
 
 // Close Delay
-public:
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Door|Behaviour", meta=(AllowPrivateAccess="true"))
+	TSet<EKeyColor> RequiredKeys{};
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Door|Behaviour", meta=(AllowPrivateAccess="true"))
 	float CloseDelay{0.f};
 	UPROPERTY(BlueprintReadOnly, Category="Door|Behaviour", meta=(AllowPrivateAccess="true"))
 	FTimerHandle CloseDelayHandle;
+	
 };
 
