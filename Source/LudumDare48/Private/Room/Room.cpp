@@ -70,20 +70,20 @@ ARoom::ARoom()
 		switch (i)
 		{
 		case 0:
-			NewRelativeLocation = FVector(0.f, 380.f, 150.f);
+			NewRelativeLocation = FVector(0.f, 340.f, 150.f);
 			break;
 
 		case 1:
-			NewRelativeLocation = FVector(-380.f, 0.f, 150.f);
+			NewRelativeLocation = FVector(-340.f, 0.f, 150.f);
 			break;
 
 		case 2:
-			NewRelativeLocation = FVector(0.f, -380.f, 150.f);
+			NewRelativeLocation = FVector(0.f, -340.f, 150.f);
 			
 			break;
 
 		case 3:
-			NewRelativeLocation = FVector(380.f, 0.f, 150.f);
+			NewRelativeLocation = FVector(340.f, 0.f, 150.f);
 			break;
 		}
 
