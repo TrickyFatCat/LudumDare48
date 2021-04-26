@@ -75,6 +75,7 @@ void ARoomsHub::GenerateRooms()
 			);
 			Room->SetProperties(FRoomProperties(RoomClass == ObstacleRoomClass ? true : false));
 			Room->SetPosition(FRoomPosition(i, j));
+			Room->SetActorHiddenInGame(RoomClass != StartRoomClass ? true : false);
 			Room->FinishSpawning(Position);
 
 			Grid[i].Add(new FNode(Room));
