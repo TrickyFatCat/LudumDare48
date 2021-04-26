@@ -50,6 +50,8 @@ public:
 	bool IsRenderPath;
 	
 	AMonster* Monster;
+	FNode* StartRoom;
+
 
 	TArray<ARoom*> PathBetween(FRoomPosition Start, FRoomPosition End);
 
@@ -61,4 +63,7 @@ protected:
 	void GenerateRooms();
 	void CreateLinks() const;
 	void UpdateMainPath(std::deque<FNode*> Path) const;
+
+	UFUNCTION()
+	void OnRestartRoom();
 };
