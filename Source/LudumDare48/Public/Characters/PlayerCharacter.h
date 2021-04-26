@@ -49,6 +49,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerTeleportation);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoomChanged);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMagicCasted);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMoveToStart);
 /**
  * 
  */
@@ -68,10 +70,12 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	FRoomPosition Position;
-	FRoomPosition MonsterPosition;
 
 public:
+
+	FRoomPosition Position;
+	FRoomPosition MonsterPosition;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -95,6 +99,11 @@ public:
 	FOnMagicCasted OnMagicCasted;
 	void UpdatePositions(FRoomPosition PlayerNewPosition, FRoomPosition MonsterNewPosition);
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnMoveToStart OnMoveToStart;
+
+	
+	
 	// Movement
 private:
 	UFUNCTION()

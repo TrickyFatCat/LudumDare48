@@ -24,7 +24,7 @@ void ARoomsHub::GenerateRooms()
 	Grid.Init(*new TArray<FNode*>(), Rows);
 	Graph = nullptr;
 
-	FNode* Start = nullptr;
+	StartRoom = nullptr;
 	const int32 StartX = FMath::RandRange(0, Rows - 1);
 	const int32 StartY = FMath::RandRange(0, Rows - 1);
 
@@ -139,13 +139,13 @@ void ARoomsHub::GenerateRooms()
 
 			Graph == nullptr ? Graph = new FGraph(Grid[0][0]) : Graph->AddNode(Grid[i][j]);
 
-			if (RoomClass == StartRoomClass) Start = Grid[i][j];
+			if (RoomClass == StartRoomClass) StartRoom = Grid[i][j];
 			if (RoomClass == EndRoomClass) Goal = Grid[i][j];
 		}
 	}
 
 	CreateLinks();
-	const std::deque<FNode*> Path = Graph->PathBfs(Start, Goal);
+	const std::deque<FNode*> Path = Graph->PathBfs(StartRoom, Goal);
 	UpdateMainPath(Path);
 
 		const FTransform PositionMonster = FTransform(
@@ -158,9 +158,18 @@ void ARoomsHub::GenerateRooms()
 		Monster->FinishSpawning(PositionMonster);
 
 		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		Player->UpdatePositions(Start->Value->Position(), Monster->Position);
-		
+		Player->UpdatePositions(StartRoom->Value->Position(), Monster->Position);
+		Player->OnMoveToStart.AddDynamic(this, &ARoomsHub::OnRestartRoom);
 }
+
+inline void ARoomsHub::OnRestartRoom()
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	Grid[Player->Position.PositionX][Player->Position.PositionY]->Value->SetActorHiddenInGame(true);
+	StartRoom->Value->SetActorHiddenInGame(false);
+	Player->UpdatePositions(StartRoom->Value->Position(), Monster->Position);
+}
+
 
 void ARoomsHub::CreateLinks() const
 {
