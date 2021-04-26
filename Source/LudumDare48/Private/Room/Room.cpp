@@ -21,7 +21,6 @@ ARoom::ARoom()
 		const FName SpawnName = FName(TEXT("PlayerSpawnPoint"), i + 1);
 
 		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
-		Portals[i]->SetHiddenInGame(false);
 		Portals[i]->SetupAttachment(GetRootComponent());
 		// Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
