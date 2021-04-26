@@ -64,7 +64,7 @@ ARoom::ARoom()
 
 		
 		PlayerSpawnPoints.Add(CreateDefaultSubobject<UArrowComponent>(SpawnName));
-		//PlayerSpawnPoints[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
+		PlayerSpawnPoints[i]->SetupAttachment(RootComponent);
 		PlayerSpawnPoints[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		switch (i)
