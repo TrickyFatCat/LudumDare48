@@ -122,6 +122,8 @@ void APlayerCharacter::IncreaseLives(const int32 Amount) const
 void APlayerCharacter::BroadcastLivesDecreased(const int32 Value)
 {
 	OnLivesDecreased.Broadcast(Value);
+
+	if (GetLives() <= 0) OnGameOver.Broadcast();
 }
 
 void APlayerCharacter::BroadcastLivesIncreased(const int32 Value)
