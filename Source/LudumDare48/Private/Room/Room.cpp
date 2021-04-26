@@ -1,10 +1,10 @@
 #include "Room/Room.h"
 
-#include <Shape.h>
 
 #include "Characters/PlayerCharacter.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Math/Color.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRoom, All, All)
 
@@ -12,8 +12,8 @@ ARoom::ARoom()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
-	USceneComponent* Root = CreateDefaultSubobject<USceneComponent>(TEXT("Floor"));
-	Root->SetupAttachment(RootComponent);
+	Floor = CreateDefaultSubobject<USceneComponent>(TEXT("Floor"));
+	RootComponent = Floor;
 	
 	for (int i = 0; i < 4; ++i)
 	{
@@ -21,36 +21,44 @@ ARoom::ARoom()
 		const FName SpawnName = FName(TEXT("PlayerSpawnPoint"), i + 1);
 
 		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
-		Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
-		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		Portals[i]->SetHiddenInGame(false);
+		Portals[i]->SetupAttachment(GetRootComponent());
+		// Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
+		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Portals[i]->SetCollisionObjectType(ECC_WorldDynamic);
 		Portals[i]->SetCollisionResponseToChannels(ECR_Ignore);
 		Portals[i]->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 		
 
 		FVector NewRelativeLocation{FVector::ZeroVector};
+		FVector NewExtent{FVector::ZeroVector};
 
 		switch (i)
 		{
 		case 0:
-			NewRelativeLocation = FVector(0.f, -500.f, 50.f);
+			NewRelativeLocation = FVector(0.f, -400.f, 50.f);
+			NewExtent = FVector(128.f, 32.f, 128.f);
 			break;
 
 		case 1:
-			NewRelativeLocation = FVector(500.f, 0.f, 50.f);
+			NewRelativeLocation = FVector(400.f, 0.f, 50.f);
+			NewExtent = FVector(32.f, 128.f, 128.f);
 			break;
 
 		case 2:
-			NewRelativeLocation = FVector(0.f, 500.f, 50.f);
+			NewRelativeLocation = FVector(0.f, 400.f, 50.f);
+			NewExtent = FVector(128.f, 32.f, 128.f);
 			break;
 
 		case 3:
-			NewRelativeLocation = FVector(-500.f, 0.f, 50.f);
+			NewRelativeLocation = FVector(-400.f, 0.f, 50.f);
+			NewExtent = FVector(32.f, 128.f, 128.f);
 			break;
 		}
 
 		
 		Portals[i]->SetRelativeLocation(NewRelativeLocation);
+		Portals[i]->SetBoxExtent(NewExtent);
 
 		
 		PlayerSpawnPoints.Add(CreateDefaultSubobject<UArrowComponent>(SpawnName));
