@@ -157,7 +157,7 @@ void ARoomsHub::GenerateRooms()
 			Player->OnMoveToStart.AddDynamic(this, &ARoomsHub::OnRestartRoom);
 		}
 		
-	
+	ShufflePortals();
 }
 
 inline void ARoomsHub::OnRestartRoom()
@@ -255,6 +255,16 @@ void ARoomsHub::ShufflePortals()
 	{
 		for(auto Node : Line)
 		{
+			for(auto Portal : Node->Value->GetPortalDirections())
+			{
+				int X = FMath::RandRange(0,Rows-1);
+				int Y = FMath::RandRange(0,Rows-1);
+				const int Direction = FMath::RandRange(0,3);
+				const FRoomPortal From = Grid[X][Y]->Value->GetPortalDirections()[Direction];
+				const FRoomPortal To = Portal.Room->GetPortalDirections()[Direction];
+				Portal.Room->SetPortalDirection(From.Direction, From.Room, From.IsMainPath);
+				Grid[X][Y]->Value->SetPortalDirection(To.Direction, To.Room, To.IsMainPath);
+			}
 			
 		}
 	}
