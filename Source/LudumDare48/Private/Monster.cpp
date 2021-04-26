@@ -9,9 +9,8 @@
 // Sets default values
 AMonster::AMonster()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -28,23 +27,34 @@ void AMonster::Tick(float DeltaTime)
 
 void AMonster::OnPlayerTeleported(ARoom* NewRoom, APlayerCharacter* Player)
 {
+	FNode* CurrentMonsterNode = Grid[Position.PositionX][Position.PositionY];
+	FNode* PlayerNode = Grid[NewRoom->Position().PositionX][NewRoom->Position().PositionY];
+	const std::deque<FNode*> PathToPlayer = Graph->PathBfs(CurrentMonsterNode, PlayerNode);
 
-	FNode* Current = Grid[Position.PositionX][Position.PositionY];
+	FNode* Next = nullptr;
+	if (PathToPlayer.size() != 0) Next = PathToPlayer[PathToPlayer.size() - 2];
 
-	int r = FMath::RandRange(0,Current->Edges.size() - 1);
-	FNode* Next = Current->Edges[r];
-	Position = Next->Value->Position();
-	UE_LOG(LogMonster, Warning, TEXT("Monstro Position: x=%i y=%i"), Next->Value->Position().PositionX, Next->Value->Position().PositionY);
-	UE_LOG(LogMonster, Warning, TEXT("Player Position: x=%i y=%i"), NewRoom->Position().PositionX, NewRoom->Position().PositionY);
-
-	if(NewRoom->Position().PositionX == Next->Value->Position().PositionX && NewRoom->Position().PositionY == Next->Value->Position().PositionY)
+	if(Next && FMath::RandRange(0, 10) <= 4)
 	{
-		PlayerCharacter->DecreaseLives(1);
+		Next = CurrentMonsterNode->Edges[FMath::RandRange(0, CurrentMonsterNode->Edges.size() - 1)];	
 	}
+
+	Position = Next->Value->Position();
 	
+	UE_LOG(LogMonster, Warning, TEXT("Monstro Position: x=%i y=%i"), Next->Value->Position().PositionX,
+	       Next->Value->Position().PositionY);
+	UE_LOG(LogMonster, Warning, TEXT("Player Position: x=%i y=%i"), NewRoom->Position().PositionX,
+	       NewRoom->Position().PositionY);
+
+	if (NewRoom->Position().PositionX == Position.PositionX && NewRoom->Position().PositionY == Position.PositionY)
+	{
+		Player->DecreaseLives(1);
+	}
+
 	FVector Location = Next->Value->GetActorLocation();
 	Location.Z = 150.0f;
 
 	SetActorLocation(Location);
-}
 
+	Player->UpdatePositions(NewRoom->Position(), Next->Value->Position());
+}

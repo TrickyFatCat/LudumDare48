@@ -48,7 +48,6 @@ public:
 	
 	AMonster* Monster;
 
-	UFUNCTION(BlueprintCallable)
 	TArray<ARoom*> PathBetween(FRoomPosition Start, FRoomPosition End);
 
 protected:

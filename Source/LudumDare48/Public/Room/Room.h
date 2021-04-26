@@ -4,6 +4,7 @@
 
 #include <array>
 
+#include "RoomPosition.h"
 #include "Characters/PlayerCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
@@ -21,25 +22,6 @@ enum EPortalDirection
 	East = 1,
 	South = 2,
 	West = 3,
-};
-
-USTRUCT(BlueprintType)
-struct FRoomPosition
-{
-	GENERATED_USTRUCT_BODY()
-
-	FRoomPosition(): PositionX(0), PositionY(0) {}
-	FRoomPosition(const int X, const int Y)
-	{
-		PositionX = X;
-		PositionY = Y;
-	};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int PositionX;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int PositionY;
 };
 
 USTRUCT(BlueprintType)

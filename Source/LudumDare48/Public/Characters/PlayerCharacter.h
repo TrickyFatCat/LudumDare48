@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
 #include "Components/BaseResource.h"
+#include "Room/RoomPosition.h"
 
 #include "PlayerCharacter.generated.h"
 
@@ -60,6 +61,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	FRoomPosition Position;
+	FRoomPosition MonsterPosition;
 
 public:
 	// Called every frame
@@ -79,6 +82,7 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnPlayerTeleportation FOnPlayerTeleportation;
 
+	void UpdatePositions(FRoomPosition PlayerNewPosition, FRoomPosition MonsterNewPosition);
 
 	// Movement
 private:

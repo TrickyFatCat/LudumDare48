@@ -32,7 +32,6 @@ public:
 	
 	FGraph* Graph;
 	TArray<TArray<FNode*>> Grid;
-	APlayerCharacter* PlayerCharacter;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Tick(float DeltaTime) override;

@@ -106,7 +106,6 @@ void ARoomsHub::GenerateRooms()
 		Monster->Graph = Graph;
 		Monster->Grid = Grid;
 		Monster->FinishSpawning(PositionMonster);
-		Monster->PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 void ARoomsHub::CreateLinks() const
