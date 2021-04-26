@@ -1,5 +1,7 @@
 #include "Room/RoomsHub.h"
 
+#include <ThirdParty/CryptoPP/5.6.5/include/cryptlib.h>
+
 #include "Monster.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -51,54 +53,42 @@ void ARoomsHub::GenerateRooms()
 		MonsterY = FMath::RandRange(0, Rows - 1);
 	}
 
-	FNode* KeyRoom1 = nullptr;
 	int32 KeyRoom1X = FMath::RandRange(0, Rows - 1);
 	int32 KeyRoom1Y = FMath::RandRange(0, Rows - 1);
 	while (
-		std::abs(StartX - KeyRoom1X) < 1 &&
-		std::abs(StartY - KeyRoom1Y) < 1 &&
-		std::abs(GoalX - KeyRoom1X) < 1 &&
-		std::abs(GoalY - KeyRoom1Y) < 1
+		(std::abs(StartX - KeyRoom1X) < 1 && std::abs(StartY - KeyRoom1Y) < 1) ||
+		(std::abs(GoalX - KeyRoom1X) < 1 && std::abs(GoalY - KeyRoom1Y) < 1)
 	)
 	{
 		KeyRoom1X = FMath::RandRange(0, Rows - 1);
 		KeyRoom1Y = FMath::RandRange(0, Rows - 1);
 	}
 	
-	FNode* KeyRoom2 = nullptr;
 	int32 KeyRoom2X = FMath::RandRange(0, Rows - 1);
 	int32 KeyRoom2Y = FMath::RandRange(0, Rows - 1);
 	while (
-		std::abs(StartX - KeyRoom2X) < 1 &&
-		std::abs(StartY - KeyRoom2Y) < 1 &&
-		std::abs(GoalX - KeyRoom2X) < 1 &&
-		std::abs(GoalY - KeyRoom2Y) < 1 &&
-		std::abs(KeyRoom1X - KeyRoom2X) < 1 &&
-		std::abs(KeyRoom1Y - KeyRoom2Y) < 1
+		(std::abs(StartX - KeyRoom2X) < 1 && std::abs(StartY - KeyRoom2Y) < 1) ||
+		(std::abs(GoalX - KeyRoom2X) < 1 && std::abs(GoalY - KeyRoom2Y) < 1) ||
+		(std::abs(KeyRoom1X - KeyRoom2X) < 1 && std::abs(KeyRoom1Y - KeyRoom2Y) < 1)
 	)
 	{
 		KeyRoom2X = FMath::RandRange(0, Rows - 1);
 		KeyRoom2Y = FMath::RandRange(0, Rows - 1);
 	}
 	
-	FNode* KeyRoom3 = nullptr;
 	int32 KeyRoom3X = FMath::RandRange(0, Rows - 1);
 	int32 KeyRoom3Y = FMath::RandRange(0, Rows - 1);
 	while (
-	std::abs(StartX - KeyRoom3X) < 1 &&
-	std::abs(StartY - KeyRoom3Y) < 1 &&
-	std::abs(GoalX - KeyRoom3X) < 1 &&
-	std::abs(GoalY - KeyRoom3Y) < 1 &&
-	std::abs(KeyRoom1X - KeyRoom3X) < 1 &&
-	std::abs(KeyRoom1Y - KeyRoom3Y) < 1 &&
-	std::abs(KeyRoom2X - KeyRoom3X) < 1 &&
-	std::abs(KeyRoom2Y - KeyRoom3Y) < 1
+	(std::abs(StartX - KeyRoom3X) < 1 && std::abs(StartY - KeyRoom3Y) < 1) ||
+	(std::abs(GoalX - KeyRoom3X) < 1 && std::abs(GoalY - KeyRoom3Y) < 1) ||
+	(std::abs(KeyRoom1X - KeyRoom3X) < 1 && std::abs(KeyRoom1Y - KeyRoom3Y) < 1) ||
+	(std::abs(KeyRoom2X - KeyRoom3X) < 1 && std::abs(KeyRoom2Y - KeyRoom3Y) < 1)
 	)
 	{
 		KeyRoom3X = FMath::RandRange(0, Rows - 1);
 		KeyRoom3Y = FMath::RandRange(0, Rows - 1);
 	}
-	
+
 	Monster = World->SpawnActorDeferred<AMonster>(
 			MonsterClass,
 			FTransform(FRotator::ZeroRotator, FVector::ZeroVector));
@@ -115,6 +105,7 @@ void ARoomsHub::GenerateRooms()
 
 			if (i == StartX && j == StartY) RoomClass = StartRoomClass;
 			if (i == GoalX && j == GoalY) RoomClass = EndRoomClass;
+
 			if (i == KeyRoom1X && j == KeyRoom1Y) RoomClass = KeyRooms[0];
 			if (i == KeyRoom2X && j == KeyRoom2Y) RoomClass = KeyRooms[1];
 			if (i == KeyRoom3X && j == KeyRoom3Y) RoomClass = KeyRooms[2];
@@ -145,7 +136,9 @@ void ARoomsHub::GenerateRooms()
 	}
 
 	CreateLinks();
-	const std::deque<FNode*> Path = Graph->PathBfs(StartRoom, Goal);
+	const std::deque<FNode*> Path = Graph->PathBfs(Grid[StartX][StartY], Grid[GoalX][GoalY]);
+	StartRoom = Grid[StartX][StartY];
+	Goal = Grid[GoalX][GoalY];
 	UpdateMainPath(Path);
 
 		const FTransform PositionMonster = FTransform(
@@ -158,8 +151,13 @@ void ARoomsHub::GenerateRooms()
 		Monster->FinishSpawning(PositionMonster);
 
 		APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-		Player->UpdatePositions(StartRoom->Value->Position(), Monster->Position);
-		Player->OnMoveToStart.AddDynamic(this, &ARoomsHub::OnRestartRoom);
+		if (Player)
+		{
+			Player->UpdatePositions(Grid[StartX][StartY]->Value->Position(), Monster->Position);
+			Player->OnMoveToStart.AddDynamic(this, &ARoomsHub::OnRestartRoom);
+		}
+		
+	
 }
 
 inline void ARoomsHub::OnRestartRoom()
@@ -167,7 +165,7 @@ inline void ARoomsHub::OnRestartRoom()
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	Grid[Player->Position.PositionX][Player->Position.PositionY]->Value->SetActorHiddenInGame(true);
 	StartRoom->Value->SetActorHiddenInGame(false);
-	Player->UpdatePositions(StartRoom->Value->Position(), Monster->Position);
+	Player->UpdatePositions(StartRoom->Value->Position(), Monster ? Monster->Position : FRoomPosition(0,0));
 }
 
 
@@ -251,3 +249,13 @@ TArray<ARoom*> ARoomsHub::PathBetween(const FRoomPosition Start, const FRoomPosi
 	return Array;
 }
 
+void ARoomsHub::ShufflePortals()
+{
+	for(auto Line : Grid)
+	{
+		for(auto Node : Line)
+		{
+			
+		}
+	}
+}

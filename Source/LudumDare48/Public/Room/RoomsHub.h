@@ -51,9 +51,11 @@ public:
 	
 	AMonster* Monster;
 	FNode* StartRoom;
+	FRoomPosition StartPosition;
 
 
 	TArray<ARoom*> PathBetween(FRoomPosition Start, FRoomPosition End);
+	void ShufflePortals();
 
 protected:
 	FGraph* Graph;
