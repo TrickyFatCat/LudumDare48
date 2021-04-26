@@ -88,6 +88,17 @@ void APlayerCharacter::UpdatePositions(const FRoomPosition PlayerNewPosition, co
 
 	UE_LOG(LogPlayerCharacter, Warning, TEXT("Position Player : x%i y%i"), Position.PositionX, Position.PositionY);
 	UE_LOG(LogPlayerCharacter, Warning, TEXT("Position Monster : x%i y%i"), MonsterPosition.PositionX, MonsterPosition.PositionY);
+
+	if(
+		(std::abs(Position.PositionX - MonsterPosition.PositionX) == 1 || std::abs(Position.PositionY - MonsterPosition.PositionY) == 1) &&
+		!(std::abs(Position.PositionX - MonsterPosition.PositionX) == 1 && std::abs(Position.PositionY - MonsterPosition.PositionY) == 1)
+	)
+	{
+		OnMonsterNearby.Broadcast(true);
+		return;
+	}
+	
+	OnMonsterNearby.Broadcast(false);
 }
 
 void APlayerCharacter::MoveForward(const float AxisValue)
