@@ -143,8 +143,11 @@ void ARoom::MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 		i++;
 	}
 
-	if(i == 4 && !PortalDirection[i].Room) return;
+	if(i == 4) return;
+	if(!PortalDirection[i].Room) return;
+
+	SetActorHiddenInGame(true);
+	PortalDirection[i].Room->SetActorHiddenInGame(false);
 
 	PlayerCharacter->TeleportPlayer(PortalDirection[i].Room->PlayerSpawnPoints[i]->GetComponentLocation());
-
 }
