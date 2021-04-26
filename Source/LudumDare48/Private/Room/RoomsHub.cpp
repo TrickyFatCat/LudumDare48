@@ -1,6 +1,7 @@
 #include "Room/RoomsHub.h"
 
 #include "Monster.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRoomsHub, All, All)
 
@@ -50,7 +51,12 @@ void ARoomsHub::GenerateRooms()
 		MonsterY = FMath::RandRange(0, Rows - 1);
 	}
 	
+	Monster = World->SpawnActorDeferred<AMonster>(
+			MonsterClass,
+			FTransform(FRotator::ZeroRotator, FVector::ZeroVector));
+	if (!Monster) return;
 
+	
 	for (int i = 0; i < Rows; i++)
 	{
 		for (int j = 0; j < Rows; j++)
@@ -77,6 +83,7 @@ void ARoomsHub::GenerateRooms()
 			Room->SetPosition(FRoomPosition(i, j));
 			Room->SetActorHiddenInGame(RoomClass != StartRoomClass ? true : false);
 			Room->FinishSpawning(Position);
+			Room->OnPlayerTeleported.AddDynamic(Monster, &AMonster::OnPlayerTeleported);
 
 			Grid[i].Add(new FNode(Room));
 
@@ -91,20 +98,15 @@ void ARoomsHub::GenerateRooms()
 	const std::deque<FNode*> Path = Graph->PathBfs(Start, Goal);
 	UpdateMainPath(Path);
 
-
-		AMonster* Monster = World->SpawnActorDeferred<AMonster>(
-		MonsterClass,
-		FTransform(FRotator::ZeroRotator, FVector::ZeroVector));
-		if (!Monster) return;;
-
-		FTransform PositionMonster = FTransform(
+		const FTransform PositionMonster = FTransform(
 			FRotator::ZeroRotator,
 			FVector(100.0f * MonsterY * Scale, 100.0f * MonsterX * Scale, 300.0f)
 		);
 		Monster->Position = FRoomPosition(MonsterX, MonsterY);
 		Monster->Graph = Graph;
 		Monster->Grid = Grid;
-		Monster->FinishSpawning(PositionMonster);	
+		Monster->FinishSpawning(PositionMonster);
+		Monster->PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 }
 
 void ARoomsHub::CreateLinks() const
@@ -174,7 +176,6 @@ void ARoomsHub::UpdateMainPath(std::deque<FNode*> Path) const
 		Last = N->Value;
 	}
 }
-
 
 TArray<ARoom*> ARoomsHub::PathBetween(const FRoomPosition Start, const FRoomPosition End)
 {

@@ -5,10 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "Graph.h"
+#include "Characters/PlayerCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Room/Room.h"
 
 #include "Monster.generated.h"
+
+
+DEFINE_LOG_CATEGORY_STATIC(LogMonster, All, All)
 
 UCLASS()
 class LUDUMDARE48_API AMonster : public AActor
@@ -28,10 +32,12 @@ public:
 	
 	FGraph* Graph;
 	TArray<TArray<FNode*>> Grid;
+	APlayerCharacter* PlayerCharacter;
 
 	UFUNCTION(BlueprintCallable)
-	void MoveMonster();
 	virtual void Tick(float DeltaTime) override;
 
 
+	UFUNCTION()
+	void OnPlayerTeleported(ARoom* NewRoom, APlayerCharacter* Player);
 };

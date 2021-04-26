@@ -45,6 +45,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
 	bool IsRenderPath;
+	
+	AMonster* Monster;
 
 	UFUNCTION(BlueprintCallable)
 	TArray<ARoom*> PathBetween(FRoomPosition Start, FRoomPosition End);

@@ -4,6 +4,7 @@
 
 #include <array>
 
+#include "Characters/PlayerCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
@@ -11,6 +12,8 @@
 #include "Room.generated.h"
 
 class ARoom;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerTeleported, ARoom*, NewRoom, APlayerCharacter*, Player);
 
 enum EPortalDirection
 {
@@ -120,4 +123,7 @@ public:
 	UFUNCTION()
 	void MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerTeleported OnPlayerTeleported;
 };
