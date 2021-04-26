@@ -148,6 +148,6 @@ void ARoom::MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 
 	SetActorHiddenInGame(true);
 	PortalDirection[i].Room->SetActorHiddenInGame(false);
-
+	OnPlayerTeleported.Broadcast(PortalDirection[i].Room, PlayerCharacter);
 	PlayerCharacter->TeleportPlayer(PortalDirection[i].Room->PlayerSpawnPoints[i]->GetComponentLocation());
 }

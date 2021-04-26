@@ -4,6 +4,8 @@
 
 #include <array>
 
+#include "RoomPosition.h"
+#include "Characters/PlayerCharacter.h"
 #include "Components/ArrowComponent.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
@@ -12,31 +14,14 @@
 
 class ARoom;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerTeleported, ARoom*, NewRoom, APlayerCharacter*, Player);
+
 enum EPortalDirection
 {
 	North = 0,
 	East = 1,
 	South = 2,
 	West = 3,
-};
-
-USTRUCT(BlueprintType)
-struct FRoomPosition
-{
-	GENERATED_USTRUCT_BODY()
-
-	FRoomPosition(): PositionX(0), PositionY(0) {}
-	FRoomPosition(const int X, const int Y)
-	{
-		PositionX = X;
-		PositionY = Y;
-	};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int PositionX;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int PositionY;
 };
 
 USTRUCT(BlueprintType)
@@ -120,4 +105,7 @@ public:
 	UFUNCTION()
 	void MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerTeleported OnPlayerTeleported;
 };
