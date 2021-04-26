@@ -10,7 +10,6 @@
 #include "PlayerCharacter.generated.h"
 
 class UBaseResource;
-
 UENUM(BlueprintType)
 enum class EKeyColor : uint8
 {
@@ -46,6 +45,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStartSpawn);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerWin);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerTeleportation);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoomChanged);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMagicCasted);
 /**
  * 
  */
@@ -57,6 +60,10 @@ class LUDUMDARE48_API APlayerCharacter : public ABaseCharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
+	UFUNCTION(BlueprintPure)
+	TArray<int32> GetPlayerRoom() { TArray<int32> PlayerRoom{Position.PositionX, Position.PositionY}; return PlayerRoom; }
+	UFUNCTION(BlueprintPure)
+	TArray<int32> GetMonsterRoom() { TArray<int32> MonsterRoom{MonsterPosition.PositionX, MonsterPosition.PositionY}; return MonsterRoom; }
 
 protected:
 	// Called when the game starts or when spawned
@@ -82,6 +89,10 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnPlayerTeleportation FOnPlayerTeleportation;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnRoomChanged OnRoomChanged;
+	UPROPERTY(BlueprintAssignable)
+	FOnMagicCasted OnMagicCasted;
 	void UpdatePositions(FRoomPosition PlayerNewPosition, FRoomPosition MonsterNewPosition);
 
 	// Movement

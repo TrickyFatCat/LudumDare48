@@ -13,7 +13,6 @@
 #include "Room.generated.h"
 
 class ARoom;
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPlayerTeleported, ARoom*, NewRoom, APlayerCharacter*, Player);
 
 enum EPortalDirection
@@ -23,6 +22,7 @@ enum EPortalDirection
 	South = 2,
 	West = 3,
 };
+
 
 USTRUCT(BlueprintType)
 struct FRoomProperties

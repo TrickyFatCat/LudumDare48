@@ -8,6 +8,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogRoom, All, All)
 
+
+
 ARoom::ARoom()
 {
 	PrimaryActorTick.bCanEverTick = false;

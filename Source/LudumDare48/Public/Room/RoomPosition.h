@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
-
 struct FRoomPosition
 {
 
@@ -16,3 +15,4 @@ struct FRoomPosition
 
 	int PositionY;
 };
+

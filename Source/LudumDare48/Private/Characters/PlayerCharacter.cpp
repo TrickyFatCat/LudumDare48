@@ -84,6 +84,7 @@ void APlayerCharacter::UpdatePositions(const FRoomPosition PlayerNewPosition, co
 {
 	Position = PlayerNewPosition;
 	MonsterPosition = MonsterNewPosition;
+	OnRoomChanged.Broadcast();
 
 	UE_LOG(LogPlayerCharacter, Warning, TEXT("Position Player : x%i y%i"), Position.PositionX, Position.PositionY);
 	UE_LOG(LogPlayerCharacter, Warning, TEXT("Position Monster : x%i y%i"), MonsterPosition.PositionX, MonsterPosition.PositionY);
@@ -231,7 +232,13 @@ void APlayerCharacter::BroadcastMagicIncreased(const int32 Value)
 
 void APlayerCharacter::CastMagic()
 {
+	int32 PreviousMagic = GetMagic();
 	DecreaseMagic(1);
+
+	if (PreviousMagic > 0)
+	{
+		OnMagicCasted.Broadcast();
+	}
 	// Do what you must to do
 	// Here we must play our anim montage
 }
