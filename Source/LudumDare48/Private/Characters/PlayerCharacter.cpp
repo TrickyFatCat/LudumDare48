@@ -47,13 +47,15 @@ void APlayerCharacter::BeginPlay()
 
 	HitPoints->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsDecreased);
 	HitPoints->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastHitPointsIncreased);
-	OnTakeAnyDamage.AddDynamic(this, &APlayerCharacter::ReceiveDamage);
+	// OnTakeAnyDamage.AddDynamic(this, &APlayerCharacter::ReceiveDamage);
 
 	Coins->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastCoinsDecreased);
 	Coins->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastCoinsIncreased);
 
 	Magic->OnValueDecreased.AddDynamic(this, &APlayerCharacter::BroadcastMagicDecreased);
 	Magic->OnValueIncreased.AddDynamic(this, &APlayerCharacter::BroadcastMagicIncreased);
+
+	InitialLocation = GetActorLocation();
 }
 
 // Called every frame
@@ -61,6 +63,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
