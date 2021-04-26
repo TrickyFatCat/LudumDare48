@@ -79,6 +79,7 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnPlayerTeleportation FOnPlayerTeleportation;
 
+
 	// Movement
 private:
 	UFUNCTION()
