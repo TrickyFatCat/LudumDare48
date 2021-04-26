@@ -8,6 +8,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogRoom, All, All)
 
+
+
 ARoom::ARoom()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -22,6 +24,7 @@ ARoom::ARoom()
 
 		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
 		Portals[i]->SetupAttachment(GetRootComponent());
+		Portals[i]->SetHiddenInGame(true);
 		// Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Portals[i]->SetCollisionObjectType(ECC_WorldDynamic);
@@ -67,20 +70,20 @@ ARoom::ARoom()
 		switch (i)
 		{
 		case 0:
-			NewRelativeLocation = FVector(0.f, 380.f, 150.f);
+			NewRelativeLocation = FVector(0.f, 340.f, 150.f);
 			break;
 
 		case 1:
-			NewRelativeLocation = FVector(-380.f, 0.f, 150.f);
+			NewRelativeLocation = FVector(-340.f, 0.f, 150.f);
 			break;
 
 		case 2:
-			NewRelativeLocation = FVector(0.f, -380.f, 150.f);
+			NewRelativeLocation = FVector(0.f, -340.f, 150.f);
 			
 			break;
 
 		case 3:
-			NewRelativeLocation = FVector(380.f, 0.f, 150.f);
+			NewRelativeLocation = FVector(340.f, 0.f, 150.f);
 			break;
 		}
 
