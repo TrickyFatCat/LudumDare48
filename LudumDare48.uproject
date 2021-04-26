@@ -224,11 +224,6 @@
 		}
 	],
 	"TargetPlatforms": [
-		"LinuxNoEditor",
-		"LinuxAArch64NoEditor",
-		"MacNoEditor",
-		"TVOS",
-		"WindowsNoEditor",
-		"AllDesktop"
+		"WindowsNoEditor"
 	]
 }
