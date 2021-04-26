@@ -24,6 +24,7 @@ ARoom::ARoom()
 
 		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
 		Portals[i]->SetupAttachment(GetRootComponent());
+		Portals[i]->SetHiddenInGame(true);
 		// Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
 		Portals[i]->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Portals[i]->SetCollisionObjectType(ECC_WorldDynamic);
