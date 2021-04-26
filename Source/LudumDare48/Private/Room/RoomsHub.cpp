@@ -167,6 +167,7 @@ inline void ARoomsHub::OnRestartRoom()
 	APlayerCharacter* Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 	Grid[Player->Position.PositionX][Player->Position.PositionY]->Value->SetActorHiddenInGame(true);
 	StartRoom->Value->SetActorHiddenInGame(false);
+	Player->UpdatePositions(StartRoom->Value->Position(), Monster->Position);
 }
 
 
