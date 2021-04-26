@@ -36,22 +36,22 @@ ARoom::ARoom()
 		switch (i)
 		{
 		case 0:
-			NewRelativeLocation = FVector(0.f, -400.f, 50.f);
+			NewRelativeLocation = FVector(0.f, -460.f, 50.f);
 			NewExtent = FVector(128.f, 32.f, 128.f);
 			break;
 
 		case 1:
-			NewRelativeLocation = FVector(400.f, 0.f, 50.f);
+			NewRelativeLocation = FVector(460.f, 0.f, 50.f);
 			NewExtent = FVector(32.f, 128.f, 128.f);
 			break;
 
 		case 2:
-			NewRelativeLocation = FVector(0.f, 400.f, 50.f);
+			NewRelativeLocation = FVector(0.f, 460.f, 50.f);
 			NewExtent = FVector(128.f, 32.f, 128.f);
 			break;
 
 		case 3:
-			NewRelativeLocation = FVector(-400.f, 0.f, 50.f);
+			NewRelativeLocation = FVector(-460.f, 0.f, 50.f);
 			NewExtent = FVector(32.f, 128.f, 128.f);
 			break;
 		}
@@ -68,20 +68,20 @@ ARoom::ARoom()
 		switch (i)
 		{
 		case 0:
-			NewRelativeLocation = FVector(0.f, 450.f, 100.f);
+			NewRelativeLocation = FVector(0.f, 380.f, 100.f);
 			break;
 
 		case 1:
-			NewRelativeLocation = FVector(-450.f, 0.f, 100.f);
+			NewRelativeLocation = FVector(-380.f, 0.f, 100.f);
 			break;
 
 		case 2:
-			NewRelativeLocation = FVector(0.f, -450.f, 100.f);
+			NewRelativeLocation = FVector(0.f, -380.f, 100.f);
 			
 			break;
 
 		case 3:
-			NewRelativeLocation = FVector(450.f, 0.f, 100.f);
+			NewRelativeLocation = FVector(380.f, 0.f, 100.f);
 			break;
 		}
 
@@ -132,6 +132,19 @@ void ARoom::UpdateColor(const FLinearColor Color) const
 void ARoom::MovePortal(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//UE_LOG(LogRoom, Error, TEXT("Timer finished: %s"),);
-	UE_LOG(LogRoom, Display, TEXT("%s"), *OtherActor->GetName());
+	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(OtherActor);
+	UBoxComponent* Portal = Cast<UBoxComponent>(OverlappedComponent);
+	if(!PlayerCharacter && !Portal) return;
+
+	int i = 0;
+	for (auto P : Portals)
+	{
+		if (P == Portal) break;
+		i++;
+	}
+
+	if(i == 4) return;
+
+	PlayerCharacter->TeleportPlayer(PortalDirection[i].Room->PlayerSpawnPoints[i]->GetComponentLocation());
+
 }
