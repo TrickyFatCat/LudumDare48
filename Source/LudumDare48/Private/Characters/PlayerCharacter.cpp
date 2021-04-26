@@ -8,6 +8,9 @@
 #include "Interfaces/Interaction.h"
 #include "Pickups/BasePickup.h"
 
+
+DEFINE_LOG_CATEGORY_STATIC(LogPlayerCharacter, All, All)
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -76,6 +79,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 }
 
+
+void APlayerCharacter::UpdatePositions(const FRoomPosition PlayerNewPosition, const FRoomPosition MonsterNewPosition)
+{
+	Position = PlayerNewPosition;
+	MonsterPosition = MonsterNewPosition;
+
+	UE_LOG(LogPlayerCharacter, Warning, TEXT("Position Player : x%i y%i"), Position.PositionX, Position.PositionY);
+	UE_LOG(LogPlayerCharacter, Warning, TEXT("Position Monster : x%i y%i"), MonsterPosition.PositionX, MonsterPosition.PositionY);
+}
 
 void APlayerCharacter::MoveForward(const float AxisValue)
 {
