@@ -76,6 +76,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::Interact);
 }
 
+
 void APlayerCharacter::MoveForward(const float AxisValue)
 {
 	if (!IsValid(Controller)) return;
