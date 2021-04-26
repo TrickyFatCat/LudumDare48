@@ -4,6 +4,7 @@
 #include "Pickups/BasePickup.h"
 #include "Characters/PlayerCharacter.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -58,6 +59,10 @@ void ABasePickup::AnimateRotation() const
 
 void ABasePickup::ActivatePickup(APlayerCharacter* PlayerCharacter)
 {
+	if (PickupSound != nullptr)
+	{
+		UGameplayStatics::PlaySound2D(this, PickupSound);
+	}
 	OnPickup();
 	Destroy();
 }

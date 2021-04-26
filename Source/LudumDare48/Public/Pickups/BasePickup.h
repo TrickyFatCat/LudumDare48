@@ -28,6 +28,8 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USoundBase* PickupSound{nullptr};
 
 // Trigger volume
 private:
