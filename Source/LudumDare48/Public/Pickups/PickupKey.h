@@ -21,4 +21,8 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Pickup|Key")
 	EKeyColor Color{EKeyColor::RED};
+	UPROPERTY(EditDefaultsOnly, Category="Pickup|Key")
+	int32 BonusLives{2};
+	UPROPERTY(EditDefaultsOnly, Category="Pickup|Key")
+	int32 BonusMagic{2};
 };

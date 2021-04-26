@@ -6,5 +6,7 @@
 void APickupKey::ActivatePickup(APlayerCharacter* PlayerCharacter)
 {
 	PlayerCharacter->AddKey(Color);
+	PlayerCharacter->IncreaseLives(BonusLives);
+	PlayerCharacter->IncreaseMagic(BonusMagic);
 	Super::ActivatePickup(PlayerCharacter);
 }
