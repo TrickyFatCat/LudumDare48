@@ -32,7 +32,7 @@ void ARoomsHub::GenerateRooms()
 	int32 GoalX = FMath::RandRange(0, Rows - 1);
 	int32 GoalY = FMath::RandRange(0, Rows - 1);
 	while (
-		std::abs(StartX - GoalX) < MinimalDistanceBetweenStartEnd ||
+		std::abs(StartX - GoalX) < MinimalDistanceBetweenStartEnd &&
 		std::abs(StartY - GoalY) < MinimalDistanceBetweenStartEnd
 	)
 	{
@@ -43,12 +43,60 @@ void ARoomsHub::GenerateRooms()
 	int32 MonsterX = FMath::RandRange(0, Rows - 1);
 	int32 MonsterY = FMath::RandRange(0, Rows - 1);
 	while (
-		std::abs(StartX - MonsterX) < MinimalDistanceBetweenStartEnd ||
+		std::abs(StartX - MonsterX) < MinimalDistanceBetweenStartEnd &&
 		std::abs(StartY - MonsterY) < MinimalDistanceBetweenStartEnd
 	)
 	{
 		MonsterX = FMath::RandRange(0, Rows - 1);
 		MonsterY = FMath::RandRange(0, Rows - 1);
+	}
+
+	FNode* KeyRoom1 = nullptr;
+	int32 KeyRoom1X = FMath::RandRange(0, Rows - 1);
+	int32 KeyRoom1Y = FMath::RandRange(0, Rows - 1);
+	while (
+		std::abs(StartX - KeyRoom1X) < 1 &&
+		std::abs(StartY - KeyRoom1Y) < 1 &&
+		std::abs(GoalX - KeyRoom1X) < 1 &&
+		std::abs(GoalY - KeyRoom1Y) < 1
+	)
+	{
+		KeyRoom1X = FMath::RandRange(0, Rows - 1);
+		KeyRoom1Y = FMath::RandRange(0, Rows - 1);
+	}
+	
+	FNode* KeyRoom2 = nullptr;
+	int32 KeyRoom2X = FMath::RandRange(0, Rows - 1);
+	int32 KeyRoom2Y = FMath::RandRange(0, Rows - 1);
+	while (
+		std::abs(StartX - KeyRoom2X) < 1 &&
+		std::abs(StartY - KeyRoom2Y) < 1 &&
+		std::abs(GoalX - KeyRoom2X) < 1 &&
+		std::abs(GoalY - KeyRoom2Y) < 1 &&
+		std::abs(KeyRoom1X - KeyRoom2X) < 1 &&
+		std::abs(KeyRoom1Y - KeyRoom2Y) < 1
+	)
+	{
+		KeyRoom2X = FMath::RandRange(0, Rows - 1);
+		KeyRoom2Y = FMath::RandRange(0, Rows - 1);
+	}
+	
+	FNode* KeyRoom3 = nullptr;
+	int32 KeyRoom3X = FMath::RandRange(0, Rows - 1);
+	int32 KeyRoom3Y = FMath::RandRange(0, Rows - 1);
+	while (
+	std::abs(StartX - KeyRoom3X) < 1 &&
+	std::abs(StartY - KeyRoom3Y) < 1 &&
+	std::abs(GoalX - KeyRoom3X) < 1 &&
+	std::abs(GoalY - KeyRoom3Y) < 1 &&
+	std::abs(KeyRoom1X - KeyRoom3X) < 1 &&
+	std::abs(KeyRoom1Y - KeyRoom3Y) < 1 &&
+	std::abs(KeyRoom2X - KeyRoom3X) < 1 &&
+	std::abs(KeyRoom2Y - KeyRoom3Y) < 1
+	)
+	{
+		KeyRoom3X = FMath::RandRange(0, Rows - 1);
+		KeyRoom3Y = FMath::RandRange(0, Rows - 1);
 	}
 	
 	Monster = World->SpawnActorDeferred<AMonster>(
@@ -56,7 +104,6 @@ void ARoomsHub::GenerateRooms()
 			FTransform(FRotator::ZeroRotator, FVector::ZeroVector));
 	if (!Monster) return;
 
-	
 	for (int i = 0; i < Rows; i++)
 	{
 		for (int j = 0; j < Rows; j++)
@@ -68,6 +115,9 @@ void ARoomsHub::GenerateRooms()
 
 			if (i == StartX && j == StartY) RoomClass = StartRoomClass;
 			if (i == GoalX && j == GoalY) RoomClass = EndRoomClass;
+			if (i == KeyRoom1X && j == KeyRoom1Y) RoomClass = KeyRooms[0];
+			if (i == KeyRoom2X && j == KeyRoom2Y) RoomClass = KeyRooms[1];
+			if (i == KeyRoom3X && j == KeyRoom3Y) RoomClass = KeyRooms[2];
 
 			ARoom* Room = World->SpawnActorDeferred<ARoom>(
 				RoomClass,

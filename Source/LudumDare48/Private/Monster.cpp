@@ -32,6 +32,12 @@ void AMonster::OnPlayerTeleported(ARoom* NewRoom, APlayerCharacter* Player)
 	const std::deque<FNode*> PathToPlayer = Graph->PathBfs(CurrentMonsterNode, PlayerNode);
 
 	FNode* Next = nullptr;
+	if (PathToPlayer.size() == 1)
+	{
+		Player->UpdatePositions(NewRoom->Position(), CurrentMonsterNode->Value->Position());
+		Player->DecreaseLives(1);
+		return;
+	}
 	if (PathToPlayer.size() != 0) Next = PathToPlayer[PathToPlayer.size() - 2];
 
 	if(Next && FMath::RandRange(0, 10) <= 4)

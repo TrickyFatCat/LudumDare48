@@ -41,6 +41,9 @@ public:
 	TSubclassOf<ARoom> ObstacleRoomClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
+	TArray<TSubclassOf<ARoom>> KeyRooms;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
 	TSubclassOf<AMonster> MonsterClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Generate")
