@@ -1,7 +1,5 @@
 #include "Room/RoomsHub.h"
 
-#include <ThirdParty/CryptoPP/5.6.5/include/cryptlib.h>
-
 #include "Monster.h"
 #include "Kismet/GameplayStatics.h"
 
