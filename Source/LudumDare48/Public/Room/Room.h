@@ -75,6 +75,8 @@ private:
 	USceneComponent* Floor{nullptr};
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Floor", meta=(AllowPrivateAccess="true"))
 	USceneComponent* CameraAnchor{nullptr};
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta=(AllowPrivateAccess="true"))
+	USceneComponent* Pickups{nullptr};
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Portals", meta=(AllowPrivateAccess="true"))
 	TArray<UBoxComponent*> Portals{};

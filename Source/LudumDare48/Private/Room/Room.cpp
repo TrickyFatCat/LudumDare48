@@ -15,7 +15,11 @@ ARoom::ARoom()
 	PrimaryActorTick.bCanEverTick = false;
 
 	Floor = CreateDefaultSubobject<USceneComponent>(TEXT("Floor"));
+	Floor->SetMobility(EComponentMobility::Static);
 	RootComponent = Floor;
+	Pickups = CreateDefaultSubobject<USceneComponent>(TEXT("Pickups"));
+	Pickups->SetupAttachment(RootComponent);
+	Pickups->SetMobility(EComponentMobility::Static);
 	
 	for (int i = 0; i < 4; ++i)
 	{
@@ -23,6 +27,7 @@ ARoom::ARoom()
 		const FName SpawnName = FName(TEXT("PlayerSpawnPoint"), i + 1);
 
 		Portals.Add(CreateDefaultSubobject<UBoxComponent>(PortalName));
+		Portals[i]->SetMobility(EComponentMobility::Static);
 		Portals[i]->SetupAttachment(GetRootComponent());
 		Portals[i]->SetHiddenInGame(true);
 		// Portals[i]->AttachToComponent(RootComponent, FAttachmentTransformRules(EAttachmentRule::KeepRelative, true));
@@ -66,6 +71,7 @@ ARoom::ARoom()
 		PlayerSpawnPoints.Add(CreateDefaultSubobject<UArrowComponent>(SpawnName));
 		PlayerSpawnPoints[i]->SetupAttachment(RootComponent);
 		PlayerSpawnPoints[i]->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		PlayerSpawnPoints[i]->SetMobility(EComponentMobility::Static);
 
 		switch (i)
 		{
