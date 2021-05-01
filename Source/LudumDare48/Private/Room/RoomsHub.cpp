@@ -1,7 +1,5 @@
 #include "Room/RoomsHub.h"
 
-#include <ThirdParty/CryptoPP/5.6.5/include/cryptlib.h>
-
 #include "Monster.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -128,8 +126,16 @@ void ARoomsHub::GenerateRooms()
 
 			Grid[i].Add(new FNode(Room));
 
-			Graph == nullptr ? Graph = new FGraph(Grid[0][0]) : Graph->AddNode(Grid[i][j]);
+			// Graph == nullptr ? Graph = new FGraph(Grid[0][0]) : Graph->AddNode(Grid[i][j]);
 
+			if (Graph == nullptr)
+			{
+				Graph = new FGraph(Grid[0][0]);
+			}
+			else
+			{
+				Graph->AddNode(Grid[i][j]);
+			}
 			if (RoomClass == StartRoomClass) StartRoom = Grid[i][j];
 			if (RoomClass == EndRoomClass) Goal = Grid[i][j];
 		}
